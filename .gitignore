@@ -61,4 +61,3 @@ out/
 .vscode/
 
 *.pem
-/src/main/resources/application.yml
