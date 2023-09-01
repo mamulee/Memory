@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://memory-rds.cxb5ayqjhhe1.ap-northeast-2.rds.amazonaws.com:3306/memory?autoReconnect=true
+    url: jdbc:mysql://localhost:3306/sys?autoReconnect=true
     username: root
-    password: babymemoryrds
+    password: memory
   jpa:
     hibernate:
       ddl-auto: update
