@@ -2,14 +2,14 @@ package com.baby.memory.memory.entity
 
 import com.baby.memory.common.entity.BaseTimeEntity
 import com.baby.memory.memory.entity.enum.ReactionStatus
-import com.baby.memory.user.entity.User
+import com.baby.memory.member.entity.Member
 import jakarta.persistence.*
 
 @Entity
 class Memory(
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    var user: User,
+    @JoinColumn(name = "member_id", nullable = false)
+    var member: Member,
     @Lob
     var content: String,
     @OneToMany(mappedBy = "memory")
@@ -22,8 +22,8 @@ class Memory(
     var id: Long = 0
         protected set
 
-    fun setWriter(user: User) {
-        this.user = user
+    fun setWriter(user: Member) {
+        this.member = user
         user.memories.add(this)
     }
 

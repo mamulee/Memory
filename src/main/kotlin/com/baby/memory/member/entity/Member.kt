@@ -1,4 +1,4 @@
-package com.baby.memory.user.entity
+package com.baby.memory.member.entity
 
 import com.baby.memory.common.entity.BaseTimeEntity
 import com.baby.memory.memory.entity.Memory
@@ -10,26 +10,26 @@ import jakarta.persistence.OneToMany
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @Entity
-class User(
-    val userEmail: String,
-    var userPassword: String,
-    var userName: String,
-    @OneToMany(mappedBy = "user")
+class Member(
+    val memberEmail: String,
+    var memberPassword: String,
+    var memberName: String,
+    @OneToMany(mappedBy = "member")
     val memories: MutableList<Memory> = mutableListOf(),
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "member")
     val savedMemories: MutableList<Memory> = mutableListOf()
 ): BaseTimeEntity() {
     @Id @GeneratedValue
-    @Column(name = "user_id")
+    @Column(name = "member_id")
     var id: Long = 0
         protected set
 
     fun updateUserPassowrd(passwordEncoder: PasswordEncoder, password: String) {
-        this.userPassword = passwordEncoder.encode(password)
+        this.memberPassword = passwordEncoder.encode(password)
     }
 
     fun updateUserName(name: String) {
-        this.userName = name
+        this.memberName = name
     }
 
     fun addSavedMemory(memory: Memory) {
