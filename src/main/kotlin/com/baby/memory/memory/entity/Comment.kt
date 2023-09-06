@@ -8,19 +8,16 @@ import jakarta.persistence.*
 class Comment(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    var member: Member,
+    val member: Member,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memory_id", nullable = false)
     var memory: Memory,
-    var content: String
+    var content: String,
+    var isDeleted: Boolean = false
 ): BaseTimeEntity() {
     @Id
     @GeneratedValue
     @Column(name = "comment_id")
     var id: Long = 0
         protected set
-
-    fun updateContent(content: String) {
-        this.content = content
-    }
 }

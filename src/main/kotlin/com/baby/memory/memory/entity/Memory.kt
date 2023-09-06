@@ -15,7 +15,8 @@ class Memory(
     @OneToMany(mappedBy = "memory")
     val comments: MutableList<Comment> = mutableListOf(),
     @OneToMany(mappedBy = "memory")
-    val reactions: MutableList<Reaction> = mutableListOf()
+    val reactions: MutableList<Reaction> = mutableListOf(),
+    var isDeleted: Boolean = false
 ): BaseTimeEntity() {
     @Id @GeneratedValue
     @Column(name = "memory_id")
@@ -25,10 +26,6 @@ class Memory(
     fun setWriter(user: Member) {
         this.member = user
         user.memories.add(this)
-    }
-
-    fun updateContent(content: String) {
-        this.content = content
     }
 
     fun addComment(comment: Comment) {

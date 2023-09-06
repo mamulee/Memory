@@ -1,0 +1,7 @@
+package com.baby.memory.memory.repository
+
+import com.baby.memory.memory.entity.Comment
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface CommentRepository: JpaRepository<Comment, Long> {
+}
