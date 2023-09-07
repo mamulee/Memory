@@ -13,7 +13,7 @@ import jakarta.persistence.OneToMany
 class Member(
     val memberEmail: String,
     var memberPassword: String,
-    var memberName: String,
+    var memberName: String?,
     @OneToMany(mappedBy = "member")
     val memories: MutableList<Memory> = mutableListOf(),
     @OneToMany(mappedBy = "member")
