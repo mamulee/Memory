@@ -17,27 +17,31 @@ class CommentServiceImpl(
     private val commentRepository: CommentRepository
 ): CommentService {
     @Transactional
-    override fun createComment(req: CommentRequestDto) {
-        val member = getMember(req.memberId)
-        val memory = getMemory(req.memoryId)
+    override fun createComment(memoryId: Long, req: CommentRequestDto) {
+        val member = getMember(1L)
+        val memory = getMemory(memoryId)
         val comment = req.toEntity(member, memory)
         commentRepository.save(comment)
     }
 
     @Transactional
-    override fun updateComment(req: CommentRequestDto) {
-        val comment = getComment(req.commentId!!)
+    override fun updateComment(memoryId: Long, commentId: Long, req: CommentRequestDto) {
+        val memory = getMemory(memoryId)
+        // verify member
+        val comment = memory.comments.firstOrNull { it.id == commentId } ?: throw Exception("해당 댓글을 찾을 수 없습니다.")
         comment.content = req.content
     }
 
     @Transactional(readOnly = true)
-    override fun getComments(memoryId: Long): MutableList<CommentResponseDto> {
-        TODO("Not yet implemented")
+    override fun getComments(memoryId: Long): List<CommentResponseDto> {
+        getMemory(memoryId)
+        return commentRepository.findAllByMemoryId(memoryId)!!.map { CommentResponseDto.of(it) }
     }
 
     @Transactional
-    override fun deleteComment(commentId: Long) {
-        val comment = getComment(commentId)
+    override fun deleteComment(memoryId: Long, commentId: Long) {
+        val memory = getMemory(memoryId)
+        val comment = memory.comments.firstOrNull { it.id == commentId } ?: throw Exception("해당 댓글을 찾을 수 없습니다.")
         comment.isDeleted = true
     }
 

@@ -4,8 +4,8 @@ import com.baby.memory.memory.dto.request.CommentRequestDto
 import com.baby.memory.memory.dto.response.CommentResponseDto
 
 interface CommentService {
-    fun createComment(req: CommentRequestDto)
-    fun updateComment(req: CommentRequestDto)
-    fun getComments(memoryId: Long): MutableList<CommentResponseDto>
-    fun deleteComment(commentId: Long)
+    fun createComment(memoryId: Long, req: CommentRequestDto)
+    fun updateComment(memoryId: Long, commentId: Long, req: CommentRequestDto)
+    fun getComments(memoryId: Long): List<CommentResponseDto>
+    fun deleteComment(memoryId: Long, commentId: Long)
 }

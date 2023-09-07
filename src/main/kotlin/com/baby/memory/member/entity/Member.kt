@@ -7,7 +7,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
-import org.springframework.security.crypto.password.PasswordEncoder
+//import org.springframework.security.crypto.password.PasswordEncoder
 
 @Entity
 class Member(
@@ -24,9 +24,9 @@ class Member(
     var id: Long = 0
         protected set
 
-    fun updateUserPassowrd(passwordEncoder: PasswordEncoder, password: String) {
-        this.memberPassword = passwordEncoder.encode(password)
-    }
+//    fun updateUserPassowrd(passwordEncoder: PasswordEncoder, password: String) {
+//        this.memberPassword = passwordEncoder.encode(password)
+//    }
 
     fun updateUserName(name: String) {
         this.memberName = name

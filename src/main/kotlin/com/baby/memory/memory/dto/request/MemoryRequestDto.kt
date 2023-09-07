@@ -5,11 +5,7 @@ import com.baby.memory.member.entity.Member
 
 data class MemoryRequestDto(
     val memberId: Long,
-    val memoryId: Long?,
-    val content: String,
-    val likeCnt: Int,
-    val sadCnt: Int,
-    val angryCnt: Int
+    val content: String
 ) {
     fun toEntity(
         member: Member

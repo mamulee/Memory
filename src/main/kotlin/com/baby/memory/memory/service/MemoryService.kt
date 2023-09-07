@@ -5,10 +5,10 @@ import com.baby.memory.memory.dto.response.MemoryResponseDto
 
 interface MemoryService {
     fun createMemory(req: MemoryRequestDto)
-    fun updateMemory(req: MemoryRequestDto)
+    fun updateMemory(memoryId: Long, req: MemoryRequestDto): MemoryResponseDto
     // 페이징 필요
-    fun getMemories(): MutableList<MemoryResponseDto>
-    fun getMyMemories(): MutableList<MemoryResponseDto>
-    fun getMySavedMemories(): MutableList<MemoryResponseDto>
+    fun getMemories(): List<MemoryResponseDto>
+    fun getMyMemories(): List<MemoryResponseDto>
+    fun getMySavedMemories(): List<MemoryResponseDto>
     fun deleteMemory(memoryId: Long)
 }

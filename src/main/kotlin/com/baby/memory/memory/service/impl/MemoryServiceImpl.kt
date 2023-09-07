@@ -22,29 +22,33 @@ class MemoryServiceImpl(
     }
 
     @Transactional
-    override fun updateMemory(req: MemoryRequestDto) {
-        val memory = getMemory(req.memoryId!!)
+    override fun updateMemory(memoryId: Long, req: MemoryRequestDto): MemoryResponseDto {
+        val memory = getMemory(memoryId)
         memory.content = req.content
+        return MemoryResponseDto.of(memory)
     }
 
     @Transactional(readOnly = true)
-    override fun getMemories(): MutableList<MemoryResponseDto> {
-        TODO("Not yet implemented")
+    override fun getMemories(): List<MemoryResponseDto> {
+        return memoryRepository.findAll().map { MemoryResponseDto.of(it) }
     }
 
     @Transactional(readOnly = true)
-    override fun getMyMemories(): MutableList<MemoryResponseDto> {
-        TODO("Not yet implemented")
+    override fun getMyMemories(): List<MemoryResponseDto> {
+        return memoryRepository.findAllByMemberId(1L)!!.map { MemoryResponseDto.of(it) }
     }
 
     @Transactional(readOnly = true)
-    override fun getMySavedMemories(): MutableList<MemoryResponseDto> {
+    override fun getMySavedMemories(): List<MemoryResponseDto> {
         TODO("Not yet implemented")
     }
 
+    @Transactional
     override fun deleteMemory(memoryId: Long) {
         val memory = getMemory(memoryId)
         memory.isDeleted = true
+        // 게시글에 포함된 댓글도 모두 isDeleted = true 처리 필요.
+        memory.comments.map { it.isDeleted = true }
     }
 
     private fun getMember(memberId: Long) = memberRepository.findByIdOrNull(memberId)
