@@ -18,7 +18,7 @@ class SecurityConfig(
     private val jwtTokenProvider: JwtTokenProvider
 ) {
     @Bean
-    fun fliterChain(http: HttpSecurity): SecurityFilterChain {
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .httpBasic{ it.disable() }
             .csrf{ it.disable() }

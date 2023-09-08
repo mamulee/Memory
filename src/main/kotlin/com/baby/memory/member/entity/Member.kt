@@ -1,12 +1,10 @@
 package com.baby.memory.member.entity
 
 import com.baby.memory.common.entity.BaseTimeEntity
+import com.baby.memory.common.status.ROLE
 import com.baby.memory.memory.entity.Memory
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
+
 //import org.springframework.security.crypto.password.PasswordEncoder
 
 @Entity
@@ -17,7 +15,9 @@ class Member(
     @OneToMany(mappedBy = "member")
     val memories: MutableList<Memory> = mutableListOf(),
     @OneToMany(mappedBy = "member")
-    val savedMemories: MutableList<Memory> = mutableListOf()
+    val savedMemories: MutableList<Memory> = mutableListOf(),
+    @Enumerated(EnumType.STRING)
+    var memberRole: ROLE? = null
 ): BaseTimeEntity() {
     @Id @GeneratedValue
     @Column(name = "member_id")

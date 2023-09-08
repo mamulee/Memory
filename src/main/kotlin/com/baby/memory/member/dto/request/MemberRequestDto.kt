@@ -1,5 +1,6 @@
 package com.baby.memory.member.dto.request
 
+import com.baby.memory.common.status.ROLE
 import com.baby.memory.member.entity.Member
 import com.baby.memory.memory.entity.Memory
 import jakarta.validation.constraints.NotBlank
