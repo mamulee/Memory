@@ -4,7 +4,9 @@ import com.baby.memory.common.authority.JwtTokenProvider
 import com.baby.memory.common.authority.TokenInfo
 import com.baby.memory.common.status.ROLE
 import com.baby.memory.member.dto.request.MemberRequestDto
+import com.baby.memory.member.dto.request.MemberUpdateRequestDto
 import com.baby.memory.member.dto.response.MemberResponseDto
+import com.baby.memory.member.entity.Member
 import com.baby.memory.member.repository.MemberRepository
 import com.baby.memory.member.service.MemberService
 import org.springframework.data.repository.findByIdOrNull
@@ -26,7 +28,8 @@ class MemberServiceImpl(
         val randomStr = "user_${UUID.randomUUID()}"
         val memberName = randomStr.substring(0, randomStr.indexOf("-"))
         validateMemberName(memberName)
-        val member = req.toEntity(memberName)
+        val member = req.toEntity()
+        member.memberName = memberName
         member.memberRole = ROLE.MEMBER
         memberRepository.save(member)
     }
@@ -41,9 +44,16 @@ class MemberServiceImpl(
         return jwtTokenProvider.createToken(authentication)
     }
 
+    @Transactional(readOnly = true)
     override fun getMyInfo(memberId: Long): MemberResponseDto {
-        val member = memberRepository.findByIdOrNull(memberId) ?: throw Exception("존재하지 않는 회원입니다.")
+        val member = getMember(memberId)
         return MemberResponseDto.of(member)
+    }
+
+    @Transactional
+    override fun updateMyInfo(memberId: Long, req: MemberUpdateRequestDto) {
+        val member = getMember(memberId)
+        member.memberName = req.memberName
     }
 
     private fun validateMemberEmail(memberEmail: String) {
@@ -53,5 +63,9 @@ class MemberServiceImpl(
     private fun validateMemberName(memberName: String) {
         if(memberRepository.existsByMemberName(memberName))
             throw Exception("이미 사용 중인 이름입니다.")
+    }
+    private fun getMember(memberId: Long): Member {
+        return memberRepository.findByIdOrNull(memberId)
+            ?: throw Exception("존재하지 않는 회원입니다.")
     }
 }
