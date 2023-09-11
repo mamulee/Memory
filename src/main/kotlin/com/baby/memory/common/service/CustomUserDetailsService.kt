@@ -1,5 +1,6 @@
 package com.baby.memory.common.service
 
+import com.baby.memory.common.dto.CustomUser
 import com.baby.memory.member.entity.Member
 import com.baby.memory.member.repository.MemberRepository
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -21,7 +22,8 @@ class CustomUserDetailsService(
 
 
     private fun createUserDetails(member: Member): UserDetails =
-        User(
+        CustomUser(
+            member.id,
             member.memberEmail,
             passwordEncoder.encode(member.memberPassword),
             listOf(SimpleGrantedAuthority("ROLE_${member.memberRole}"))

@@ -4,8 +4,10 @@ import com.baby.memory.common.authority.JwtTokenProvider
 import com.baby.memory.common.authority.TokenInfo
 import com.baby.memory.common.status.ROLE
 import com.baby.memory.member.dto.request.MemberRequestDto
+import com.baby.memory.member.dto.response.MemberResponseDto
 import com.baby.memory.member.repository.MemberRepository
 import com.baby.memory.member.service.MemberService
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.stereotype.Service
@@ -37,6 +39,11 @@ class MemberServiceImpl(
 //        if(member.memberPassword != req.memberPassword)
 //            throw Exception("비밀번호가 일치하지 않습니다.")
         return jwtTokenProvider.createToken(authentication)
+    }
+
+    override fun getMyInfo(memberId: Long): MemberResponseDto {
+        val member = memberRepository.findByIdOrNull(memberId) ?: throw Exception("존재하지 않는 회원입니다.")
+        return MemberResponseDto.of(member)
     }
 
     private fun validateMemberEmail(memberEmail: String) {

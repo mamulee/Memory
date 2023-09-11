@@ -24,7 +24,11 @@ class SecurityConfig(
             .csrf{ it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) } // JWT를 사용하기 때문에 Session 사용 X
             .authorizeHttpRequests {
-                it.requestMatchers("/members/new").anonymous() // 해당 URL 요청은 인증하지 않은 사용자
+                it.requestMatchers(
+                    "/members/new",
+                    "/members/signin"
+                ).anonymous() // 해당 URL 요청은 인증하지 않은 사용자
+                    .requestMatchers("/members/**").hasRole("MEMBER")
                     .anyRequest().permitAll() // 그 외의 요청은 아무 권한없이 모두가 접근 가능
             }
             .addFilterBefore(
