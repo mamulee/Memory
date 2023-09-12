@@ -5,6 +5,8 @@ import com.baby.memory.memory.dto.response.MemoryResponseDto
 import com.baby.memory.memory.repository.MemoryRepository
 import com.baby.memory.memory.service.MemoryService
 import com.baby.memory.member.repository.MemberRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -29,8 +31,8 @@ class MemoryServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun getMemories(): List<MemoryResponseDto> {
-        return memoryRepository.findAll().map { MemoryResponseDto.of(it) }
+    override fun getMemories(pageable: Pageable): Page<MemoryResponseDto> {
+        return memoryRepository.findAll(pageable).map { MemoryResponseDto.of(it) }
     }
 
     @Transactional(readOnly = true)

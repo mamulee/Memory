@@ -1,8 +1,9 @@
 package com.baby.memory.memory.dto.response
 
-import com.baby.memory.member.entity.Member
+import com.baby.memory.common.dto.CustomUser
 import com.baby.memory.memory.entity.Memory
 import com.baby.memory.memory.entity.enum.ReactionStatus
+import org.springframework.security.core.context.SecurityContextHolder
 
 data class MemoryResponseDto(
     val memoryId: Long,
@@ -11,7 +12,9 @@ data class MemoryResponseDto(
     val comments: List<CommentResponseDto>,
     val likeCnt: Int,
     val sadCnt: Int,
-    val angryCnt: Int
+    val angryCnt: Int,
+    val reactions: List<ReactionResponseDto>,
+    val status: ReactionStatus
 ){
     companion object {
         fun of(memory: Memory): MemoryResponseDto = MemoryResponseDto(
@@ -21,7 +24,11 @@ data class MemoryResponseDto(
             comments = memory.comments.map { CommentResponseDto.of(it) },
             likeCnt = memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.LIKE }.size,
             sadCnt = memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.SAD }.size,
-            angryCnt = memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.ANGRY }.size
+            angryCnt = memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.ANGRY }.size,
+            reactions = memory.reactions.map { ReactionResponseDto.of(it) },
+            status = memory.reactions.firstOrNull{
+                it.member.id == (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
+            }?.status ?: ReactionStatus.NEUTRAL
         )
     }
 }

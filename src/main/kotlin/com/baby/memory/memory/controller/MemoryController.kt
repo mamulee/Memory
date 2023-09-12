@@ -1,9 +1,13 @@
 package com.baby.memory.memory.controller
 
+import com.baby.memory.common.dto.CustomUser
 import com.baby.memory.memory.dto.request.MemoryRequestDto
 import com.baby.memory.memory.dto.response.MemoryResponseDto
 import com.baby.memory.memory.dto.response.wrapper.MemoryWrapperDto
 import com.baby.memory.memory.service.MemoryService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -19,8 +23,8 @@ class MemoryController(
     private val memoryService: MemoryService
 ) {
     @GetMapping("")
-    fun getMemories():List<MemoryResponseDto>{
-        return memoryService.getMemories()
+    fun getMemories(pageable:Pageable):Page<MemoryResponseDto>{
+        return memoryService.getMemories(pageable)
     }
 
     @GetMapping("/self")
