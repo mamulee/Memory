@@ -1,5 +1,6 @@
 package com.baby.memory.memory.service.impl
 
+import com.baby.memory.common.dto.CustomUser
 import com.baby.memory.memory.dto.request.MemoryRequestDto
 import com.baby.memory.memory.dto.response.MemoryResponseDto
 import com.baby.memory.memory.repository.MemoryRepository
@@ -8,6 +9,7 @@ import com.baby.memory.member.repository.MemberRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -36,8 +38,9 @@ class MemoryServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun getMyMemories(): List<MemoryResponseDto> {
-        return memoryRepository.findAllByMemberId(1L)!!.map { MemoryResponseDto.of(it) }
+    override fun getMyMemories(pageable: Pageable): Page<MemoryResponseDto> {
+        val memberId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
+        return memoryRepository.findAllByMemberId(memberId, pageable)!!.map { MemoryResponseDto.of(it) }
     }
 
     @Transactional(readOnly = true)

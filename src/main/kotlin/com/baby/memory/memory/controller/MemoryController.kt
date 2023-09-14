@@ -24,12 +24,14 @@ class MemoryController(
 ) {
     @GetMapping("")
     fun getMemories(pageable:Pageable):Page<MemoryResponseDto>{
+        // TODO : 검색 기능을 조회에 한방에 넣을지
         return memoryService.getMemories(pageable)
     }
 
     @GetMapping("/self")
-    fun getMyMemories():List<MemoryResponseDto>{
-        return memoryService.getMyMemories()
+    fun getMyMemories(pageable:Pageable):Page<MemoryResponseDto>{
+        // TODO: 페이징 처리
+        return memoryService.getMyMemories(pageable)
     }
 
     @PostMapping("/new")

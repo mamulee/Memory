@@ -28,7 +28,7 @@ class SecurityConfig(
                     "/members/new",
                     "/members/sign-in"
                 ).anonymous() // 해당 URL 요청은 인증하지 않은 사용자
-                    .requestMatchers("/members/**").hasRole("MEMBER")
+                    .requestMatchers("/members/**", "/memories/**").hasRole("MEMBER")
                     .anyRequest().permitAll() // 그 외의 요청은 아무 권한없이 모두가 접근 가능
             }
             .addFilterBefore(

@@ -35,6 +35,7 @@ class MemberServiceImpl(
     }
 
     override fun signIn(req: MemberRequestDto): TokenInfo {
+        // TODO: 로그인 반환 값 / 아이디 비번 틀릴 경우 Exception
         val authenticationToken =
             UsernamePasswordAuthenticationToken(req.memberEmail, req.memberPassword)
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
@@ -53,6 +54,7 @@ class MemberServiceImpl(
     @Transactional
     override fun updateMyInfo(memberId: Long, req: MemberUpdateRequestDto) {
         val member = getMember(memberId)
+        validateMemberName(req.memberName!!)
         member.memberName = req.memberName
     }
 
