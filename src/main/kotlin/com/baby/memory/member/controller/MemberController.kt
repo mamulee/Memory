@@ -35,4 +35,12 @@ class MemberController(
         val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
         memberService.updateMyInfo(userId, req)
     }
+
+    @PostMapping("/following/{followedId}")
+    fun addFollowing(
+        @PathVariable followedId: Long
+    ) {
+        val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
+        memberService.addFollowing(userId, followedId)
+    }
 }

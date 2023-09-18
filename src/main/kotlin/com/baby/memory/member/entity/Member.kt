@@ -14,13 +14,13 @@ class Member(
     val memberEmail: String,
     var memberPassword: String,
     var memberName: String? = null,
-//    @ManyToMany
-//    @JoinTable(name = "member_relations",
-//                joinColumns = [JoinColumn(name = "followed_id")],
-//            inverseJoinColumns = [JoinColumn(name = "follower_id")])
-//    val followers: MutableList<Member> = mutableListOf(),
-//    @ManyToMany(mappedBy = "followers")
-//    val followings: MutableList<Member> = mutableListOf(),
+    @ManyToMany
+    @JoinTable(name = "member_relations",
+                joinColumns = [JoinColumn(name = "followed_id")],
+            inverseJoinColumns = [JoinColumn(name = "follower_id")])
+    val followers: MutableList<Member> = mutableListOf(),
+    @ManyToMany(mappedBy = "followers")
+    val followings: MutableList<Member> = mutableListOf(),
     @OneToMany(mappedBy = "member")
     val memories: MutableList<Memory> = mutableListOf(),
     @OneToMany(mappedBy = "member")
@@ -41,11 +41,11 @@ class Member(
         this.memberName = name
     }
 
-//    fun addFollowers(follower: Member) {
-//        followers.add(follower)
-//        follower.followings.add(this)
-//    }
-//    fun addFollowing(followed: Member) {
-//        followed.addFollowers(this)
-//    }
+    fun addFollowers(follower: Member) {
+        followers.add(follower)
+        follower.followings.add(this)
+    }
+    fun addFollowing(followed: Member) {
+        followed.addFollowers(this)
+    }
 }

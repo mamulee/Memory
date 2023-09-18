@@ -58,6 +58,13 @@ class MemberServiceImpl(
         member.memberName = req.memberName
     }
 
+    @Transactional
+    override fun addFollowing(memberId: Long, followedId: Long) {
+        val followed = getMember(followedId)
+        val member = getMember(memberId)
+        member.addFollowing(followed)
+    }
+
     private fun validateMemberEmail(memberEmail: String) {
         if(memberRepository.existsByMemberEmail(memberEmail))
             throw Exception("이미 사용 중인 이메일입니다.")

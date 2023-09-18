@@ -10,4 +10,5 @@ interface MemberService {
     fun signIn(req: MemberRequestDto): TokenInfo
     fun getMyInfo(memberId: Long):MemberResponseDto
     fun updateMyInfo(memberId:Long, req: MemberUpdateRequestDto)
+    fun addFollowing(memberId: Long, followedId: Long)
 }
