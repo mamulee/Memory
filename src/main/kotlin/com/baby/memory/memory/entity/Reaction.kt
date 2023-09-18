@@ -13,7 +13,7 @@ class Reaction(
     @JoinColumn(name = "memory_id")
     val memory: Memory,
     @Enumerated(EnumType.STRING)
-    val status: ReactionStatus
+    var status: ReactionStatus
 ) {
     @Id
     @GeneratedValue
