@@ -40,12 +40,8 @@ class MemoryServiceImpl(
     @Transactional(readOnly = true)
     override fun getMyMemories(pageable: Pageable): Page<MemoryResponseDto> {
         val memberId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
+        getMember(memberId)
         return memoryRepository.findAllByMemberId(memberId, pageable)!!.map { MemoryResponseDto.of(it) }
-    }
-
-    @Transactional(readOnly = true)
-    override fun getMySavedMemories(): List<MemoryResponseDto> {
-        TODO("Not yet implemented")
     }
 
     @Transactional

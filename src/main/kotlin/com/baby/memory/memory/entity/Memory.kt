@@ -23,9 +23,9 @@ class Memory(
     var id: Long = 0
         protected set
 
-    fun setWriter(user: Member) {
-        this.member = user
-        user.memories.add(this)
+    fun setWriter(member: Member) {
+        this.member = member
+        member.memories.add(this)
     }
 
     fun addComment(comment: Comment) {

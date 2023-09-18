@@ -10,6 +10,5 @@ interface MemoryService {
     fun updateMemory(memoryId: Long, req: MemoryRequestDto): MemoryResponseDto
     fun getMemories(pageable: Pageable): Page<MemoryResponseDto>
     fun getMyMemories(pageable: Pageable): Page<MemoryResponseDto>
-    fun getMySavedMemories(): List<MemoryResponseDto>
     fun deleteMemory(memoryId: Long)
 }
