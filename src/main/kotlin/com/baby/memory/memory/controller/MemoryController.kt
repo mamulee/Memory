@@ -30,7 +30,6 @@ class MemoryController(
 
     @GetMapping("/self")
     fun getMyMemories(pageable:Pageable):Page<MemoryResponseDto>{
-        // TODO: 페이징 처리
         return memoryService.getMyMemories(pageable)
     }
 
