@@ -60,6 +60,8 @@ class MemberServiceImpl(
         member.memberName = req.memberName
     }
 
+    // TODO : 자기 자신 팔로우 못하게 하기
+    // TODO : 중복 팔로우 방지 -> 다시 누르면 언팔
     @Transactional
     override fun addFollowing(memberId: Long, followedId: Long) {
         val followed = getMember(followedId)
