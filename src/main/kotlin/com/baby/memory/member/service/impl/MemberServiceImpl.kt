@@ -2,6 +2,8 @@ package com.baby.memory.member.service.impl
 
 import com.baby.memory.common.authority.JwtTokenProvider
 import com.baby.memory.common.authority.TokenInfo
+import com.baby.memory.common.responses.error.exception.MemberException
+import com.baby.memory.common.responses.error.exception.MemberExceptionType
 import com.baby.memory.common.status.ROLE
 import com.baby.memory.member.dto.request.MemberRequestDto
 import com.baby.memory.member.dto.request.MemberUpdateRequestDto
@@ -35,13 +37,13 @@ class MemberServiceImpl(
     }
 
     override fun signIn(req: MemberRequestDto): TokenInfo {
-        // TODO: 로그인 반환 값 / 아이디 비번 틀릴 경우 Exception
+        val member = memberRepository.findByMemberEmail(req.memberEmail)
+            ?: throw MemberException(MemberExceptionType.NOT_FOUND_MEMBER)
+        if(member.memberPassword != req.memberPassword)
+            throw MemberException(MemberExceptionType.INCORRECT_PASSWORD)
         val authenticationToken =
             UsernamePasswordAuthenticationToken(req.memberEmail, req.memberPassword)
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
-//        val member = memberRepository.findByMemberEmail(req.memberEmail) ?: throw Exception ("가입되지 않은 이메일입니다.")
-//        if(member.memberPassword != req.memberPassword)
-//            throw Exception("비밀번호가 일치하지 않습니다.")
         return jwtTokenProvider.createToken(authentication)
     }
 
@@ -67,14 +69,14 @@ class MemberServiceImpl(
 
     private fun validateMemberEmail(memberEmail: String) {
         if(memberRepository.existsByMemberEmail(memberEmail))
-            throw Exception("이미 사용 중인 이메일입니다.")
+            throw MemberException(MemberExceptionType.DUPLICATED_MEMBER_EMAIL)
     }
     private fun validateMemberName(memberName: String) {
         if(memberRepository.existsByMemberName(memberName))
-            throw Exception("이미 사용 중인 이름입니다.")
+            throw MemberException(MemberExceptionType.DUPLICATED_MEMBER_NAME)
     }
     private fun getMember(memberId: Long): Member {
         return memberRepository.findByIdOrNull(memberId)
-            ?: throw Exception("존재하지 않는 회원입니다.")
+            ?: throw MemberException(MemberExceptionType.NOT_FOUND_MEMBER)
     }
 }

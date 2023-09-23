@@ -35,6 +35,7 @@ class MemoryController(
 
     @PostMapping("/new")
     fun createMemory(@RequestBody req: MemoryRequestDto) {
+        //TODO : memberId 안 받는 거로 (토큰 해결)
         memoryService.createMemory(req)
     }
 
