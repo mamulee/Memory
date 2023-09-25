@@ -1,5 +1,6 @@
 package com.baby.memory.memory.service.impl
 
+import com.baby.memory.common.responses.error.exception.*
 import com.baby.memory.member.repository.MemberRepository
 import com.baby.memory.memory.dto.request.CommentRequestDto
 import com.baby.memory.memory.dto.response.CommentResponseDto
@@ -26,6 +27,7 @@ class CommentServiceImpl(
 
     @Transactional
     override fun updateComment(memoryId: Long, commentId: Long, req: CommentRequestDto) {
+        // TODO : 자격 검사 필요 (작성자가 맞는지)
         val memory = getMemory(memoryId)
         // verify member
         val comment = memory.comments.firstOrNull { it.id == commentId } ?: throw Exception("해당 댓글을 찾을 수 없습니다.")
@@ -40,15 +42,16 @@ class CommentServiceImpl(
 
     @Transactional
     override fun deleteComment(memoryId: Long, commentId: Long) {
+        // TODO : 자격 검사 필요 (작성자가 맞는지)
         val memory = getMemory(memoryId)
         val comment = memory.comments.firstOrNull { it.id == commentId } ?: throw Exception("해당 댓글을 찾을 수 없습니다.")
         comment.isDeleted = true
     }
 
     private fun getMember(memberId: Long) = memberRepository.findByIdOrNull(memberId)
-        ?: throw Exception("해당 사용자를 찾을 수 없습니다.")
+        ?: throw MemberException(MemberExceptionType.NOT_FOUND_MEMBER)
     private fun getMemory(memoryId: Long) = memoryRepository.findByIdOrNull(memoryId)
-        ?: throw Exception("해당 게시글을 찾을 수 없습니다.")
+        ?: throw MemoryException(MemoryExceptionType.NOT_FOUND_MEMORY)
     private fun getComment(commentId: Long) = commentRepository.findByIdOrNull(commentId)
-        ?: throw Exception("해당 댓글을 찾을 수 없습니다.")
+        ?: throw CommentException(CommentExceptionType.NOT_FOUND_COMMENT)
 }

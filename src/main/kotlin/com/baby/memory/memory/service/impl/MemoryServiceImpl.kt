@@ -1,6 +1,10 @@
 package com.baby.memory.memory.service.impl
 
 import com.baby.memory.common.dto.CustomUser
+import com.baby.memory.common.responses.error.exception.MemberException
+import com.baby.memory.common.responses.error.exception.MemberExceptionType
+import com.baby.memory.common.responses.error.exception.MemoryException
+import com.baby.memory.common.responses.error.exception.MemoryExceptionType
 import com.baby.memory.memory.dto.request.MemoryRequestDto
 import com.baby.memory.memory.dto.response.MemoryResponseDto
 import com.baby.memory.memory.repository.MemoryRepository
@@ -27,6 +31,7 @@ class MemoryServiceImpl(
 
     @Transactional
     override fun updateMemory(memoryId: Long, req: MemoryRequestDto): MemoryResponseDto {
+        // TODO : 자격 검사 필요 (작성자가 맞는지)
         val memory = getMemory(memoryId)
         memory.content = req.content
         return MemoryResponseDto.of(memory)
@@ -46,6 +51,7 @@ class MemoryServiceImpl(
 
     @Transactional
     override fun deleteMemory(memoryId: Long) {
+        // TODO : 자격 검사 필요 (작성자가 맞는지)
         val memory = getMemory(memoryId)
         memory.isDeleted = true
         // 게시글에 포함된 댓글도 모두 isDeleted = true 처리 필요.
@@ -53,7 +59,7 @@ class MemoryServiceImpl(
     }
 
     private fun getMember(memberId: Long) = memberRepository.findByIdOrNull(memberId)
-        ?: throw Exception("해당 사용자를 찾을 수 없습니다.")
+        ?: throw MemberException(MemberExceptionType.NOT_FOUND_MEMBER)
     private fun getMemory(memoryId: Long) = memoryRepository.findByIdOrNull(memoryId)
-        ?: throw Exception("해당 게시글을 찾을 수 없습니다.")
+        ?: throw MemoryException(MemoryExceptionType.NOT_FOUND_MEMORY)
 }

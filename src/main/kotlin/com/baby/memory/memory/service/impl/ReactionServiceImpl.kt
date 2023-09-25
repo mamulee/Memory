@@ -1,6 +1,10 @@
 package com.baby.memory.memory.service.impl
 
 import com.baby.memory.common.dto.CustomUser
+import com.baby.memory.common.responses.error.exception.MemberException
+import com.baby.memory.common.responses.error.exception.MemberExceptionType
+import com.baby.memory.common.responses.error.exception.MemoryException
+import com.baby.memory.common.responses.error.exception.MemoryExceptionType
 import com.baby.memory.member.repository.MemberRepository
 import com.baby.memory.memory.dto.request.CommentRequestDto
 import com.baby.memory.memory.dto.request.ReactionRequestDto
@@ -37,8 +41,7 @@ class ReactionServiceImpl(
     }
 
     private fun getMember(memberId: Long) = memberRepository.findByIdOrNull(memberId)
-        ?: throw Exception("해당 사용자를 찾을 수 없습니다.")
-
+        ?: throw MemberException(MemberExceptionType.NOT_FOUND_MEMBER)
     private fun getMemory(memoryId: Long) = memoryRepository.findByIdOrNull(memoryId)
-        ?: throw Exception("해당 게시글을 찾을 수 없습니다.")
+        ?: throw MemoryException(MemoryExceptionType.NOT_FOUND_MEMORY)
 }
