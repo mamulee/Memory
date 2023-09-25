@@ -18,5 +18,8 @@ enum class MemberExceptionType(
     ),
     INCORRECT_PASSWORD(
         "ME004", HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."
+    ),
+    NOT_AUTHORIZED_MEMBER(
+        "ME005", HttpStatus.UNAUTHORIZED, "해당 작업에 대한 권한이 없습니다."
     )
 }

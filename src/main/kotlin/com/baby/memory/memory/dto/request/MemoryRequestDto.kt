@@ -4,7 +4,6 @@ import com.baby.memory.memory.entity.Memory
 import com.baby.memory.member.entity.Member
 
 data class MemoryRequestDto(
-    val memberId: Long,
     val content: String
 ) {
     fun toEntity(

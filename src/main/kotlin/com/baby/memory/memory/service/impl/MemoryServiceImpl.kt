@@ -23,15 +23,14 @@ class MemoryServiceImpl(
     private val memoryRepository: MemoryRepository
 ): MemoryService {
     @Transactional
-    override fun createMemory(req: MemoryRequestDto) {
-        val member = getMember(req.memberId)
+    override fun createMemory(memberId: Long, req: MemoryRequestDto) {
+        val member = getMember(memberId)
         val memory = req.toEntity(member)
         memoryRepository.save(memory)
     }
 
     @Transactional
     override fun updateMemory(memoryId: Long, req: MemoryRequestDto): MemoryResponseDto {
-        // TODO : 자격 검사 필요 (작성자가 맞는지)
         val memory = getMemory(memoryId)
         memory.content = req.content
         return MemoryResponseDto.of(memory)
@@ -51,7 +50,6 @@ class MemoryServiceImpl(
 
     @Transactional
     override fun deleteMemory(memoryId: Long) {
-        // TODO : 자격 검사 필요 (작성자가 맞는지)
         val memory = getMemory(memoryId)
         memory.isDeleted = true
         // 게시글에 포함된 댓글도 모두 isDeleted = true 처리 필요.

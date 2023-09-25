@@ -1,6 +1,7 @@
 package com.baby.memory.memory.controller
 
 import com.baby.memory.common.dto.CustomUser
+import com.baby.memory.common.helper.ResourceValidator
 import com.baby.memory.memory.dto.request.MemoryRequestDto
 import com.baby.memory.memory.dto.response.MemoryResponseDto
 import com.baby.memory.memory.dto.response.wrapper.MemoryWrapperDto
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/memories")
 class MemoryController(
+    private val resourceValidator: ResourceValidator,
     private val memoryService: MemoryService
 ) {
     @GetMapping("")
@@ -35,8 +37,8 @@ class MemoryController(
 
     @PostMapping("/new")
     fun createMemory(@RequestBody req: MemoryRequestDto) {
-        //TODO : memberId 안 받는 거로 (토큰 해결)
-        memoryService.createMemory(req)
+        val memberId = resourceValidator.getCurrentUserId()
+        memoryService.createMemory(memberId, req)
     }
 
     @PatchMapping("{memoryId}")
@@ -44,6 +46,7 @@ class MemoryController(
         @PathVariable memoryId: Long,
         @RequestBody req: MemoryRequestDto
     ): MemoryWrapperDto {
+        resourceValidator.validateMember(memoryId, 'M')
         return MemoryWrapperDto.of(memoryService.updateMemory(memoryId, req))
     }
 
@@ -51,6 +54,7 @@ class MemoryController(
     fun deleteMemory(
         @PathVariable memoryId: Long
     ) {
+        resourceValidator.validateMember(memoryId, 'M')
         memoryService.deleteMemory(memoryId)
     }
 }

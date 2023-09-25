@@ -18,8 +18,8 @@ class CommentServiceImpl(
     private val commentRepository: CommentRepository
 ): CommentService {
     @Transactional
-    override fun createComment(memoryId: Long, req: CommentRequestDto) {
-        val member = getMember(1L)
+    override fun createComment(memberId: Long, memoryId: Long, req: CommentRequestDto) {
+        val member = getMember(memberId)
         val memory = getMemory(memoryId)
         val comment = req.toEntity(member, memory)
         commentRepository.save(comment)
@@ -27,9 +27,7 @@ class CommentServiceImpl(
 
     @Transactional
     override fun updateComment(memoryId: Long, commentId: Long, req: CommentRequestDto) {
-        // TODO : 자격 검사 필요 (작성자가 맞는지)
         val memory = getMemory(memoryId)
-        // verify member
         val comment = memory.comments.firstOrNull { it.id == commentId } ?: throw Exception("해당 댓글을 찾을 수 없습니다.")
         comment.content = req.content
     }
@@ -42,7 +40,6 @@ class CommentServiceImpl(
 
     @Transactional
     override fun deleteComment(memoryId: Long, commentId: Long) {
-        // TODO : 자격 검사 필요 (작성자가 맞는지)
         val memory = getMemory(memoryId)
         val comment = memory.comments.firstOrNull { it.id == commentId } ?: throw Exception("해당 댓글을 찾을 수 없습니다.")
         comment.isDeleted = true
