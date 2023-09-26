@@ -11,6 +11,8 @@ import com.baby.memory.member.dto.response.MemberResponseDto
 import com.baby.memory.member.entity.Member
 import com.baby.memory.member.repository.MemberRepository
 import com.baby.memory.member.service.MemberService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -50,7 +52,18 @@ class MemberServiceImpl(
     }
 
     @Transactional(readOnly = true)
+    override fun getMembers(pageable: Pageable): Page<MemberResponseDto> {
+        return memberRepository.findAll(pageable).map { MemberResponseDto.of(it) }
+    }
+
+    @Transactional(readOnly = true)
     override fun getMyInfo(memberId: Long): MemberResponseDto {
+        val member = getMember(memberId)
+        return MemberResponseDto.of(member)
+    }
+
+    @Transactional(readOnly = true)
+    override fun getMemberInfo(memberId: Long): MemberResponseDto {
         val member = getMember(memberId)
         return MemberResponseDto.of(member)
     }

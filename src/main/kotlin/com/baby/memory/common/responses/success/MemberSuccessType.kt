@@ -23,9 +23,18 @@ enum class MemberSuccessType(
         "MS005", HttpStatus.OK, "비밀번호 변경 성공!"
     ),
     GET_MY_INFO(
-        "MS006", HttpStatus.OK, "회원 정보 조회 성공!"
+        "MS006", HttpStatus.OK, "내 회원 정보 조회 성공!"
     ),
     FOLLOWING(
     "MS007", HttpStatus.OK, "팔로우 성공!"
+    ),
+    UNFOLLOW(
+    "MS008", HttpStatus.OK, "팔로우 취소 성공!"
+    ),
+    GET_MEMBERS(
+    "MS009", HttpStatus.OK, "전체 회원 조회 성공!"
+    ),
+    GET_MEMBER_INFO(
+    "MS010", HttpStatus.OK, "회원 조회 성공!"
     )
 }

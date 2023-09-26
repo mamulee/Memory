@@ -4,15 +4,17 @@ import com.baby.memory.common.authority.TokenInfo
 import com.baby.memory.member.dto.request.MemberRequestDto
 import com.baby.memory.member.dto.request.MemberUpdateRequestDto
 import com.baby.memory.member.dto.response.MemberResponseDto
+import com.baby.memory.memory.dto.response.MemoryResponseDto
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 
 interface MemberService {
     fun signUp(req: MemberRequestDto)
     fun signIn(req: MemberRequestDto): TokenInfo
-    fun getMyInfo(memberId: Long):MemberResponseDto
-    // TODO : 비밀번호 변경
-    fun updateMyInfo(memberId:Long, req: MemberUpdateRequestDto)
+    fun getMembers(pageable: Pageable): Page<MemberResponseDto>
+    fun getMyInfo(memberId: Long): MemberResponseDto
+    fun getMemberInfo(memberId: Long): MemberResponseDto
+    fun updateMyInfo(memberId: Long, req: MemberUpdateRequestDto)
     fun addFollowing(memberId: Long, followedId: Long)
     // TODO : unFollowing
-    // TODO : 유저 전체 조회 = 이름 / 팔로잉 수 number값 팔로워수 number값
-    // TODO : 유저 조회
 }

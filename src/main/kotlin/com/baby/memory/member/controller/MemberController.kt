@@ -1,14 +1,13 @@
 package com.baby.memory.member.controller
 
-import com.baby.memory.common.dto.CustomUser
 import com.baby.memory.common.helper.ResourceValidator
 import com.baby.memory.common.responses.success.MemberSuccessType
 import com.baby.memory.common.responses.success.SuccessResponse
 import com.baby.memory.member.dto.request.MemberRequestDto
 import com.baby.memory.member.dto.request.MemberUpdateRequestDto
 import com.baby.memory.member.service.MemberService
+import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -17,6 +16,24 @@ class MemberController(
     private val resourceValidator: ResourceValidator,
     private val memberService: MemberService
 ) {
+    @GetMapping("")
+    fun getMembers(pageable: Pageable): ResponseEntity<SuccessResponse> {
+        // TODO : 검색 기능을 조회에 한방에 넣을지
+        return SuccessResponse.toResponseEntity(
+            MemberSuccessType.GET_MEMBERS,
+            memberService.getMembers(pageable)
+        )
+    }
+    @GetMapping("{memberId}")
+    fun getMember(
+        @PathVariable memberId: Long,
+    ): ResponseEntity<SuccessResponse> {
+        return SuccessResponse.toResponseEntity(
+            MemberSuccessType.GET_MEMBER_INFO,
+            memberService.getMemberInfo(memberId)
+        )
+    }
+
     @PostMapping("/new")
     fun signUp(@RequestBody req: MemberRequestDto): ResponseEntity<SuccessResponse> {
         memberService.signUp(req)
