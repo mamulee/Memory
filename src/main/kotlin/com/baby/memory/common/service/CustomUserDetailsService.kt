@@ -4,7 +4,6 @@ import com.baby.memory.common.dto.CustomUser
 import com.baby.memory.member.entity.Member
 import com.baby.memory.member.repository.MemberRepository
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -25,7 +24,7 @@ class CustomUserDetailsService(
         CustomUser(
             member.id,
             member.memberEmail,
-            passwordEncoder.encode(member.memberPassword),
+            member.memberPassword,
             listOf(SimpleGrantedAuthority("ROLE_${member.memberRole}"))
         )
 }

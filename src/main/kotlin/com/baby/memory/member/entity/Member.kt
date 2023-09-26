@@ -3,17 +3,16 @@ package com.baby.memory.member.entity
 import com.baby.memory.common.entity.BaseTimeEntity
 import com.baby.memory.common.status.ROLE
 import com.baby.memory.memory.entity.Memory
-import com.baby.memory.memory.entity.Reaction
 import com.baby.memory.memory.entity.SavedMemory
 import jakarta.persistence.*
-
-//import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 
 @Entity
 class Member(
     val memberEmail: String,
     var memberPassword: String,
     var memberName: String? = null,
+    // TODO : 프로필 사진 필드
     @ManyToMany
     @JoinTable(name = "member_relations",
                 joinColumns = [JoinColumn(name = "followed_id")],
@@ -33,9 +32,9 @@ class Member(
     var id: Long = 0
         protected set
 
-//    fun updateUserPassowrd(passwordEncoder: PasswordEncoder, password: String) {
-//        this.memberPassword = passwordEncoder.encode(password)
-//    }
+    fun updateMemberPassowrd(passwordEncoder: PasswordEncoder, password: String) {
+        this.memberPassword = passwordEncoder.encode(password)
+    }
 
     fun updateUserName(name: String) {
         this.memberName = name

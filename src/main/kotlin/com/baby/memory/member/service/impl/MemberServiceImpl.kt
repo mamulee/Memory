@@ -14,6 +14,7 @@ import com.baby.memory.member.service.MemberService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
@@ -22,7 +23,8 @@ import java.util.UUID
 class MemberServiceImpl(
     private val memberRepository: MemberRepository,
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtTokenProvider: JwtTokenProvider,
+    private val passwordEncoder: PasswordEncoder
 ): MemberService {
     @Transactional
     override fun signUp(req: MemberRequestDto) {
@@ -30,7 +32,7 @@ class MemberServiceImpl(
         val randomStr = "user_${UUID.randomUUID()}"
         val memberName = randomStr.substring(0, randomStr.indexOf("-"))
         validateMemberName(memberName)
-        val member = req.toEntity()
+        val member = req.toEntity(passwordEncoder)
         member.memberName = memberName
         member.memberRole = ROLE.MEMBER
         memberRepository.save(member)
@@ -39,7 +41,7 @@ class MemberServiceImpl(
     override fun signIn(req: MemberRequestDto): TokenInfo {
         val member = memberRepository.findByMemberEmail(req.memberEmail)
             ?: throw MemberException(MemberExceptionType.NOT_FOUND_MEMBER)
-        if(member.memberPassword != req.memberPassword)
+        if(!passwordEncoder.matches(req.memberPassword, member.memberPassword))
             throw MemberException(MemberExceptionType.INCORRECT_PASSWORD)
         val authenticationToken =
             UsernamePasswordAuthenticationToken(req.memberEmail, req.memberPassword)

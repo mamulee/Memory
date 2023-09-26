@@ -50,7 +50,7 @@ class MemberController(
         )
     }
 
-    @PostMapping("/following/{followedId}")
+    @GetMapping("/following/{followedId}")
     fun addFollowing(
         @PathVariable followedId: Long
     ):ResponseEntity<SuccessResponse> {
