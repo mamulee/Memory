@@ -58,8 +58,15 @@ class MemberServiceImpl(
     @Transactional
     override fun updateMyInfo(memberId: Long, req: MemberUpdateRequestDto) {
         val member = getMember(memberId)
-        validateMemberName(req.memberName!!)
-        member.memberName = req.memberName
+        // 비밀번호 변경
+        req.memberPassword?.let { newPassword ->
+            member.memberPassword = passwordEncoder.encode(newPassword)
+        }
+        // 회원 닉네임 변경
+        req.memberName?.let { newMemberName ->
+            validateMemberName(newMemberName)
+            member.memberName = newMemberName
+        }
     }
 
     // TODO : 자기 자신 팔로우 못하게 하기

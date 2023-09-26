@@ -1,6 +1,7 @@
 package com.baby.memory.member.controller
 
 import com.baby.memory.common.dto.CustomUser
+import com.baby.memory.common.helper.ResourceValidator
 import com.baby.memory.common.responses.success.MemberSuccessType
 import com.baby.memory.common.responses.success.SuccessResponse
 import com.baby.memory.member.dto.request.MemberRequestDto
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/members")
 class MemberController(
+    private val resourceValidator: ResourceValidator,
     private val memberService: MemberService
 ) {
     @PostMapping("/new")
@@ -33,20 +35,21 @@ class MemberController(
 
     @GetMapping("/me")
     fun getMyInfo(): ResponseEntity<SuccessResponse> {
-        val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
+        val memberId = resourceValidator.getCurrentUserId()
         return SuccessResponse.toResponseEntity(
             MemberSuccessType.GET_MY_INFO,
-            memberService.getMyInfo(userId)
+            memberService.getMyInfo(memberId)
         )
     }
 
-    // TODO : 정보 조회 닉넴 비번 분리
     @PatchMapping("/me")
     fun updateMyInfo(@RequestBody req: MemberUpdateRequestDto): ResponseEntity<SuccessResponse> {
-        val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
+        val memberId = resourceValidator.getCurrentUserId()
+        val success = req.memberName?.let { MemberSuccessType.UPDATE_MEMBER_NAME }
+            ?: MemberSuccessType.UPDATE_MEMBER_PASSWORD
         return SuccessResponse.toResponseEntity(
-            MemberSuccessType.UPDATE_MEMBER_NAME,
-            memberService.updateMyInfo(userId, req)
+            success,
+            memberService.updateMyInfo(memberId, req)
         )
     }
 
@@ -54,8 +57,8 @@ class MemberController(
     fun addFollowing(
         @PathVariable followedId: Long
     ):ResponseEntity<SuccessResponse> {
-        val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
-        memberService.addFollowing(userId, followedId)
+        val memberId = resourceValidator.getCurrentUserId()
+        memberService.addFollowing(memberId, followedId)
         return SuccessResponse.toResponseEntity(MemberSuccessType.FOLLOWING)
     }
 }
