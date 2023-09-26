@@ -11,10 +11,9 @@ import org.springframework.data.domain.Pageable
 interface MemberService {
     fun signUp(req: MemberRequestDto)
     fun signIn(req: MemberRequestDto): TokenInfo
-    fun getMembers(pageable: Pageable): Page<MemberResponseDto>
+    fun getMembers(memberId: Long, pageable: Pageable): Page<MemberResponseDto>
     fun getMyInfo(memberId: Long): MemberResponseDto
-    fun getMemberInfo(memberId: Long): MemberResponseDto
+    fun getMemberInfo(memberId: Long, selfId: Long): MemberResponseDto
     fun updateMyInfo(memberId: Long, req: MemberUpdateRequestDto)
-    fun addFollowing(memberId: Long, followedId: Long)
-    // TODO : unFollowing
+    fun toggleFollowing(memberId: Long, followedId: Long)
 }

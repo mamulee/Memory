@@ -26,7 +26,7 @@ enum class MemberSuccessType(
         "MS006", HttpStatus.OK, "내 회원 정보 조회 성공!"
     ),
     FOLLOWING(
-    "MS007", HttpStatus.OK, "팔로우 성공!"
+    "MS007", HttpStatus.OK, "팔로우 / 팔로우 취소 성공!"
     ),
     UNFOLLOW(
     "MS008", HttpStatus.OK, "팔로우 취소 성공!"

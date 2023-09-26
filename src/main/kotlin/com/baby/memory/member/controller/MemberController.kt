@@ -19,18 +19,20 @@ class MemberController(
     @GetMapping("")
     fun getMembers(pageable: Pageable): ResponseEntity<SuccessResponse> {
         // TODO : 검색 기능을 조회에 한방에 넣을지
+        val selfId = resourceValidator.getCurrentUserId()
         return SuccessResponse.toResponseEntity(
             MemberSuccessType.GET_MEMBERS,
-            memberService.getMembers(pageable)
+            memberService.getMembers(selfId, pageable)
         )
     }
     @GetMapping("{memberId}")
     fun getMember(
         @PathVariable memberId: Long,
     ): ResponseEntity<SuccessResponse> {
+        val selfId = resourceValidator.getCurrentUserId()
         return SuccessResponse.toResponseEntity(
             MemberSuccessType.GET_MEMBER_INFO,
-            memberService.getMemberInfo(memberId)
+            memberService.getMemberInfo(memberId, selfId)
         )
     }
 
@@ -71,11 +73,12 @@ class MemberController(
     }
 
     @GetMapping("/following/{followedId}")
-    fun addFollowing(
+    fun toggleFollowing(
         @PathVariable followedId: Long
     ):ResponseEntity<SuccessResponse> {
         val memberId = resourceValidator.getCurrentUserId()
-        memberService.addFollowing(memberId, followedId)
+        memberService.toggleFollowing(memberId, followedId)
+        // TODO : 팔로우 / 팔로우 취소 구분?
         return SuccessResponse.toResponseEntity(MemberSuccessType.FOLLOWING)
     }
 }

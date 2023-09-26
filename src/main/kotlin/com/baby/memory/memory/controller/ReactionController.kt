@@ -1,5 +1,6 @@
 package com.baby.memory.memory.controller
 
+import com.baby.memory.common.helper.ResourceValidator
 import com.baby.memory.common.responses.success.ReactionSuccessType
 import com.baby.memory.common.responses.success.SuccessResponse
 import com.baby.memory.memory.dto.request.CommentRequestDto
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/memories/{memoryId}/reactions")
 class ReactionController(
+    private val resourceValidator: ResourceValidator,
     private val reactionService: ReactionService
 ) {
 
@@ -20,7 +22,8 @@ class ReactionController(
         @PathVariable memoryId: Long,
         @RequestBody req: ReactionRequestDto): ResponseEntity<SuccessResponse> {
         //TODO : 어떤 거 반환..?
-        reactionService.reaction(memoryId, req)
+        val memberId = resourceValidator.getCurrentUserId()
+        reactionService.reaction(memoryId, memberId, req)
         return SuccessResponse.toResponseEntity(
             ReactionSuccessType.REACTION
         )

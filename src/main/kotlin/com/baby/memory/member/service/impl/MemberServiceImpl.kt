@@ -51,21 +51,25 @@ class MemberServiceImpl(
         return jwtTokenProvider.createToken(authentication)
     }
 
+    // TODO : 최적화 필요
     @Transactional(readOnly = true)
-    override fun getMembers(pageable: Pageable): Page<MemberResponseDto> {
-        return memberRepository.findAll(pageable).map { MemberResponseDto.of(it) }
+    override fun getMembers(memberId: Long, pageable: Pageable): Page<MemberResponseDto> {
+        val self = getMember(memberId)
+        return memberRepository.findAll(pageable)
+            .map { MemberResponseDto.of(it, it.followers.contains(self)) }
     }
 
     @Transactional(readOnly = true)
     override fun getMyInfo(memberId: Long): MemberResponseDto {
         val member = getMember(memberId)
-        return MemberResponseDto.of(member)
+        return MemberResponseDto.of(member, false)
     }
 
     @Transactional(readOnly = true)
-    override fun getMemberInfo(memberId: Long): MemberResponseDto {
+    override fun getMemberInfo(memberId: Long, selfId: Long): MemberResponseDto {
         val member = getMember(memberId)
-        return MemberResponseDto.of(member)
+        val self = getMember(selfId)
+        return MemberResponseDto.of(member, member.followers.contains(self))
     }
 
     @Transactional
@@ -82,13 +86,19 @@ class MemberServiceImpl(
         }
     }
 
-    // TODO : 자기 자신 팔로우 못하게 하기
-    // TODO : 중복 팔로우 방지 -> 다시 누르면 언팔
     @Transactional
-    override fun addFollowing(memberId: Long, followedId: Long) {
+    override fun toggleFollowing(memberId: Long, followedId: Long) {
         val followed = getMember(followedId)
         val member = getMember(memberId)
-        member.addFollowing(followed)
+        if(followed == member) throw MemberException(MemberExceptionType.NOT_AUTHORIZED_MEMBER)
+        if (member.followings.remove(followed)) {
+            // 이미 팔로우 중인 경우 팔로우 취소
+            followed.followers.remove(member)
+        } else {
+            // 팔로우하지 않은 경우 팔로우
+            member.followings.add(followed)
+            followed.followers.add(member)
+        }
     }
 
     private fun validateMemberEmail(memberEmail: String) {
@@ -102,5 +112,8 @@ class MemberServiceImpl(
     private fun getMember(memberId: Long): Member {
         return memberRepository.findByIdOrNull(memberId)
             ?: throw MemberException(MemberExceptionType.NOT_FOUND_MEMBER)
+    }
+    private fun isFollowing(memberId: Long, followerId: Long): Boolean {
+        return memberRepository.existsByIdAndFollowingsId(memberId, followerId)
     }
 }

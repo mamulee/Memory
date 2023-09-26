@@ -28,9 +28,8 @@ class ReactionServiceImpl(
     private val reactionRepository: ReactionRepository
 ) : ReactionService {
     @Transactional
-    override fun reaction(memoryId: Long, req: ReactionRequestDto) {
+    override fun reaction(memoryId: Long, memberId: Long, req: ReactionRequestDto) {
         val memory = getMemory(memoryId)
-        val memberId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
         val member = getMember(memberId)
         val reaction = req.toEntity(member, memory)
 

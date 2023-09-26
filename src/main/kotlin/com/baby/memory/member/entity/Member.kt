@@ -40,6 +40,7 @@ class Member(
         this.memberName = name
     }
 
+    // TODO : 딱히 필요 없어진..?
     fun addFollowers(follower: Member) {
         followers.add(follower)
         follower.followings.add(this)

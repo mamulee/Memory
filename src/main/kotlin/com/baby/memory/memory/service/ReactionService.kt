@@ -5,5 +5,5 @@ import com.baby.memory.memory.dto.request.ReactionRequestDto
 import com.baby.memory.memory.dto.response.CommentResponseDto
 
 interface ReactionService {
-    fun reaction(memoryId: Long, req:ReactionRequestDto)
+    fun reaction(memoryId: Long, memberId: Long, req: ReactionRequestDto)
 }
