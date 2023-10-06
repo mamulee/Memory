@@ -5,6 +5,7 @@ import com.baby.memory.common.helper.ResourceValidator
 import com.baby.memory.common.responses.success.MemorySuccessType
 import com.baby.memory.common.responses.success.SuccessResponse
 import com.baby.memory.memory.dto.request.MemoryRequestDto
+import com.baby.memory.memory.dto.request.MemorySearchRequestDto
 import com.baby.memory.memory.dto.response.MemoryResponseDto
 import com.baby.memory.memory.dto.response.wrapper.MemoryWrapperDto
 import com.baby.memory.memory.service.MemoryService
@@ -28,11 +29,14 @@ class MemoryController(
     private val memoryService: MemoryService
 ) {
     @GetMapping("")
-    fun getMemories(pageable: Pageable): ResponseEntity<SuccessResponse> {
+    fun getMemories(
+        pageable: Pageable,
+        @RequestBody req: MemorySearchRequestDto
+    ): ResponseEntity<SuccessResponse> {
         // TODO : 검색 기능을 조회에 한방에 넣을지
         return SuccessResponse.toResponseEntity(
             MemorySuccessType.GET_MEMORY,
-            memoryService.getMemories(pageable)
+            memoryService.getMemories(pageable, req)
         )
     }
 

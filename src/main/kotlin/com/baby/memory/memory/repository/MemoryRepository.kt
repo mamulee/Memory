@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface MemoryRepository: JpaRepository<Memory, Long> {
+interface MemoryRepository: JpaRepository<Memory, Long>, CustomMemoryRepository {
 //    @EntityGraph(attributePaths = ["comment"])
     fun findAllByMemberId(memberId: Long, pageable: Pageable) : Page<Memory>?
     fun existsByIdAndMemberId(memoryId: Long, memberId: Long): Boolean

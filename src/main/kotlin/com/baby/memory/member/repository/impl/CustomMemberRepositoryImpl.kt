@@ -5,7 +5,9 @@ import com.baby.memory.member.repository.CustomMemberRepository
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.stereotype.Repository
 
+@Repository
 class CustomMemberRepositoryImpl(
     val jpaQueryFactory: JPAQueryFactory
 ): CustomMemberRepository {

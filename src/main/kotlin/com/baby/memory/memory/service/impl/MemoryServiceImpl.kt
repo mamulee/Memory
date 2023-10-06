@@ -10,6 +10,8 @@ import com.baby.memory.memory.dto.response.MemoryResponseDto
 import com.baby.memory.memory.repository.MemoryRepository
 import com.baby.memory.memory.service.MemoryService
 import com.baby.memory.member.repository.MemberRepository
+import com.baby.memory.memory.dto.request.MemorySearchRequestDto
+import com.baby.memory.memory.repository.CustomMemoryRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -20,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class MemoryServiceImpl(
     private val memberRepository: MemberRepository,
-    private val memoryRepository: MemoryRepository
+    private val memoryRepository: MemoryRepository,
 ): MemoryService {
     @Transactional
     override fun createMemory(memberId: Long, req: MemoryRequestDto) {
@@ -37,8 +39,8 @@ class MemoryServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun getMemories(pageable: Pageable): Page<MemoryResponseDto> {
-        return memoryRepository.findAll(pageable).map { MemoryResponseDto.of(it) }
+    override fun getMemories(pageable: Pageable, req: MemorySearchRequestDto): List<MemoryResponseDto> {
+        return memoryRepository.getMemoriesWithSearch(pageable, req).map { MemoryResponseDto.of(it) }
     }
 
     @Transactional(readOnly = true)
