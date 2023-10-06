@@ -6,6 +6,7 @@ import com.baby.memory.common.responses.error.exception.MemberException
 import com.baby.memory.common.responses.error.exception.MemberExceptionType
 import com.baby.memory.common.status.ROLE
 import com.baby.memory.member.dto.request.MemberRequestDto
+import com.baby.memory.member.dto.request.MemberSearchRequestDto
 import com.baby.memory.member.dto.request.MemberUpdateRequestDto
 import com.baby.memory.member.dto.response.MemberResponseDto
 import com.baby.memory.member.entity.Member
@@ -53,9 +54,9 @@ class MemberServiceImpl(
 
     // TODO : 최적화 필요
     @Transactional(readOnly = true)
-    override fun getMembers(memberId: Long, pageable: Pageable): Page<MemberResponseDto> {
-        val self = getMember(memberId)
-        return memberRepository.findAll(pageable)
+    override fun getMembers(req: MemberSearchRequestDto, pageable: Pageable): List<MemberResponseDto> {
+        val self = getMember(req.memberId!!)
+        return memberRepository.getMembersWithSearch(pageable, req)
             .map { MemberResponseDto.of(it, it.followers.contains(self)) }
     }
 

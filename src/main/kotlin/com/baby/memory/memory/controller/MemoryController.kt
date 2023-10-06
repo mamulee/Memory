@@ -33,7 +33,6 @@ class MemoryController(
         pageable: Pageable,
         @RequestBody req: MemorySearchRequestDto
     ): ResponseEntity<SuccessResponse> {
-        // TODO : 검색 기능을 조회에 한방에 넣을지
         return SuccessResponse.toResponseEntity(
             MemorySuccessType.GET_MEMORY,
             memoryService.getMemories(pageable, req)

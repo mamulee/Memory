@@ -4,6 +4,7 @@ import com.baby.memory.common.helper.ResourceValidator
 import com.baby.memory.common.responses.success.MemberSuccessType
 import com.baby.memory.common.responses.success.SuccessResponse
 import com.baby.memory.member.dto.request.MemberRequestDto
+import com.baby.memory.member.dto.request.MemberSearchRequestDto
 import com.baby.memory.member.dto.request.MemberUpdateRequestDto
 import com.baby.memory.member.service.MemberService
 import org.springframework.data.domain.Pageable
@@ -17,12 +18,15 @@ class MemberController(
     private val memberService: MemberService
 ) {
     @GetMapping("")
-    fun getMembers(pageable: Pageable): ResponseEntity<SuccessResponse> {
-        // TODO : 검색 기능을 조회에 한방에 넣을지
+    fun getMembers(
+        pageable: Pageable,
+        @RequestBody req: MemberSearchRequestDto
+    ): ResponseEntity<SuccessResponse> {
         val selfId = resourceValidator.getCurrentUserId()
+        req.memberId = selfId
         return SuccessResponse.toResponseEntity(
             MemberSuccessType.GET_MEMBERS,
-            memberService.getMembers(selfId, pageable)
+            memberService.getMembers(req, pageable)
         )
     }
     @GetMapping("{memberId}")
