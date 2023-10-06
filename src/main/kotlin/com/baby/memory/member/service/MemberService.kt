@@ -14,6 +14,7 @@ interface MemberService {
     fun getMembers(memberId: Long, pageable: Pageable): Page<MemberResponseDto>
     fun getMyInfo(memberId: Long): MemberResponseDto
     fun getMemberInfo(memberId: Long, selfId: Long): MemberResponseDto
+    fun getMemberInfoByMemberName(memberName: String, selfId: Long): MemberResponseDto
     fun updateMyInfo(memberId: Long, req: MemberUpdateRequestDto)
     fun toggleFollowing(memberId: Long, followedId: Long)
 }

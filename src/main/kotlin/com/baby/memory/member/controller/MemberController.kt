@@ -35,6 +35,16 @@ class MemberController(
             memberService.getMemberInfo(memberId, selfId)
         )
     }
+    @GetMapping("/member/{memberName}")
+    fun getMemberByMemberName(
+        @PathVariable memberName: String,
+    ): ResponseEntity<SuccessResponse> {
+        val selfId = resourceValidator.getCurrentUserId()
+        return SuccessResponse.toResponseEntity(
+            MemberSuccessType.GET_MEMBER_INFO,
+            memberService.getMemberInfoByMemberName(memberName, selfId)
+        )
+    }
 
     @PostMapping("/new")
     fun signUp(@RequestBody req: MemberRequestDto): ResponseEntity<SuccessResponse> {

@@ -72,6 +72,13 @@ class MemberServiceImpl(
         return MemberResponseDto.of(member, member.followers.contains(self))
     }
 
+    @Transactional(readOnly = true)
+    override fun getMemberInfoByMemberName(memberName: String, selfId: Long): MemberResponseDto {
+        val member = getMemberByMemberName(memberName)
+        val self = getMember(selfId)
+        return MemberResponseDto.of(member, member.followers.contains(self))
+    }
+
     @Transactional
     override fun updateMyInfo(memberId: Long, req: MemberUpdateRequestDto) {
         val member = getMember(memberId)
@@ -111,6 +118,11 @@ class MemberServiceImpl(
     }
     private fun getMember(memberId: Long): Member {
         return memberRepository.findByIdOrNull(memberId)
+            ?: throw MemberException(MemberExceptionType.NOT_FOUND_MEMBER)
+    }
+
+    private fun getMemberByMemberName(memberName: String): Member {
+        return memberRepository.findByMemberName(memberName)
             ?: throw MemberException(MemberExceptionType.NOT_FOUND_MEMBER)
     }
     private fun isFollowing(memberId: Long, followerId: Long): Boolean {
