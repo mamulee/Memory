@@ -15,7 +15,10 @@ class CustomMemoryRepositoryImpl(
         val expressions: Array<BooleanExpression?> = transferExpressions(req)
         return jpaQueryFactory
             .selectFrom(memory)
-            .where(*expressions)
+            .where(
+                *expressions,
+                memory.isDeleted.isFalse
+            )
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .orderBy(memory.createdAt.desc())
