@@ -1,6 +1,7 @@
 package com.baby.memory.member.dto.response
 
 import com.baby.memory.member.entity.Member
+import com.baby.memory.memory.dto.response.MemoryResponseDto
 
 data class MemberResponseDto(
     val id: Long,
@@ -10,7 +11,8 @@ data class MemberResponseDto(
     val following: List<FollowRelatedDto>,
     val followersCnt: Int,
     val followingCnt: Int,
-    val followingStatus: Boolean
+    val followingStatus: Boolean,
+    val memories: List<MemoryResponseDto>
 ) {
     companion object {
         fun of(member: Member, status: Boolean): MemberResponseDto = MemberResponseDto(
@@ -21,7 +23,8 @@ data class MemberResponseDto(
             following = member.followings.map { FollowRelatedDto.of(it) },
             followersCnt = member.followers.size,
             followingCnt = member.followings.size,
-            followingStatus = status
-        )
+            followingStatus = status,
+            memories = member.memories.map { MemoryResponseDto.of(it) }
+            )
     }
 }

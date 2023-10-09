@@ -17,7 +17,7 @@ class MemberController(
     private val resourceValidator: ResourceValidator,
     private val memberService: MemberService
 ) {
-    @GetMapping("")
+    @PostMapping("")
     fun getMembers(
         pageable: Pageable,
         @RequestBody req: MemberSearchRequestDto
