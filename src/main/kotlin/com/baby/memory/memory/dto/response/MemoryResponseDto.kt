@@ -16,11 +16,12 @@ data class MemoryResponseDto(
     val sadCnt: Int,
     val angryCnt: Int,
     val reactions: List<ReactionResponseDto>,
-    val status: ReactionStatus,
+    val reactionStatus: ReactionStatus,
+    val isSaved: Boolean,
     val createdAt: LocalDateTime
 ) {
     companion object {
-        fun of(memory: Memory): MemoryResponseDto = MemoryResponseDto(
+        fun of(memory: Memory, isSaved: Boolean): MemoryResponseDto = MemoryResponseDto(
             memoryId = memory.id,
             memberId = memory.member.id,
             memberName = memory.member.memberName!!,
@@ -30,9 +31,10 @@ data class MemoryResponseDto(
             sadCnt = memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.SAD }.size,
             angryCnt = memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.ANGRY }.size,
             reactions = memory.reactions.map { ReactionResponseDto.of(it) },
-            status = memory.reactions.firstOrNull {
+            reactionStatus = memory.reactions.firstOrNull {
                 it.member.id == (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
             }?.status ?: ReactionStatus.NEUTRAL,
+            isSaved = isSaved,
             createdAt = memory.createdAt
         )
     }

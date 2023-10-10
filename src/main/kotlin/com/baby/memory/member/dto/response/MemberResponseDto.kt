@@ -24,7 +24,7 @@ data class MemberResponseDto(
             followersCnt = member.followers.size,
             followingCnt = member.followings.size,
             followingStatus = status,
-            memories = member.memories.map { MemoryResponseDto.of(it) }
+            memories = member.memories.map { memory -> MemoryResponseDto.of(memory, member.savedMemories.any{it.memory.id == memory.id}) }
         )
     }
 }

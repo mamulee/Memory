@@ -5,6 +5,7 @@ import com.baby.memory.common.responses.error.exception.MemberException
 import com.baby.memory.common.responses.error.exception.MemberExceptionType
 import com.baby.memory.common.responses.error.exception.MemoryException
 import com.baby.memory.common.responses.error.exception.MemoryExceptionType
+import com.baby.memory.common.responses.success.MemorySuccessType
 import com.baby.memory.member.repository.MemberRepository
 import com.baby.memory.memory.dto.response.SavedMemoryResponseDto
 import com.baby.memory.memory.entity.SavedMemory
@@ -23,28 +24,24 @@ class SavedMemoryServiceImpl(
     private val memoryRepository: MemoryRepository,
     private val savedMemoryRepository: SavedMemoryRepository
 ) : SavedMemoryService {
-    override fun addSavedMemory(memoryId: Long) {
-        val memberId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
-        val member = getMember(memberId)
-        val memory = getMemory(memoryId)
-        // TODO: 중복 저장 금지. 이미 한 걸 쏘면 삭제하기를 합칠까ㅓ?
-        val savedMemory = SavedMemory(member, memory)
-        savedMemoryRepository.save(savedMemory)
+    override fun saveMemory(memberId: Long, memoryId: Long): MemorySuccessType {
+        val savedMemory = savedMemoryRepository.findByMemberIdAndMemoryId(memberId, memoryId)
+        return if (savedMemory == null) {
+            val member = getMember(memberId)
+            val memory = getMemory(memoryId)
+            val newSavedMemory = SavedMemory(member, memory)
+            savedMemoryRepository.save(newSavedMemory)
+            MemorySuccessType.SAVE_MEMORY
+        } else {
+            savedMemoryRepository.delete(savedMemory)
+            MemorySuccessType.UNSAVE_MEMORY
+        }
     }
 
     override fun getMySavedMemories(pageable: Pageable): Page<SavedMemoryResponseDto> {
         val memberId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
         getMember(memberId)
         return savedMemoryRepository.findAllByMemberId(memberId, pageable)!!.map { SavedMemoryResponseDto.of(it) }
-    }
-
-    // TODO: 삭제 구현 다시 생각
-    override fun deleteSavedMemory(memoryId: Long) {
-        val memberId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
-        val member = getMember(memberId)
-        val memory = getMemory(memoryId)
-        val savedMemory = SavedMemory(member, memory)
-        savedMemoryRepository.delete(savedMemory)
     }
 
     private fun getMember(memberId: Long) = memberRepository.findByIdOrNull(memberId)

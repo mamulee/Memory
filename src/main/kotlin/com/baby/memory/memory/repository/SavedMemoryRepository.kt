@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface SavedMemoryRepository : JpaRepository<SavedMemory, Long> {
 //    @EntityGraph(attributePaths = ["comment"])
     fun findAllByMemberId(memberId: Long, pageable: Pageable): Page<SavedMemory>?
+    fun findByMemberIdAndMemoryId(memberId: Long, memoryId: Long): SavedMemory?
 }

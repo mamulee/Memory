@@ -31,22 +31,23 @@ class MemoryServiceImpl(
     }
 
     @Transactional
-    override fun updateMemory(memoryId: Long, req: MemoryRequestDto): MemoryResponseDto {
+    override fun updateMemory(memberId: Long, memoryId: Long, req: MemoryRequestDto): MemoryResponseDto {
+        val self = getMember(memberId)
         val memory = getMemory(memoryId)
         memory.content = req.content
-        return MemoryResponseDto.of(memory)
+        return MemoryResponseDto.of(memory, self.savedMemories.any{it.memory.id == memoryId})
     }
 
     @Transactional(readOnly = true)
-    override fun getMemories(pageable: Pageable, req: MemorySearchRequestDto): List<MemoryResponseDto> {
-        return memoryRepository.getMemoriesWithSearch(pageable, req).map { MemoryResponseDto.of(it) }
+    override fun getMemories(memberId: Long, pageable: Pageable, req: MemorySearchRequestDto): List<MemoryResponseDto> {
+        val self = getMember(memberId)
+        return memoryRepository.getMemoriesWithSearch(pageable, req).map { memory -> MemoryResponseDto.of(memory, self.savedMemories.any{it.memory.id == memory.id}) }
     }
 
     @Transactional(readOnly = true)
-    override fun getMyMemories(pageable: Pageable): Page<MemoryResponseDto> {
-        val memberId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
-        getMember(memberId)
-        return memoryRepository.findAllByMemberId(memberId, pageable)!!.map { MemoryResponseDto.of(it) }
+    override fun getMyMemories(memberId: Long, pageable: Pageable): Page<MemoryResponseDto> {
+        val self = getMember(memberId)
+        return memoryRepository.findAllByMemberId(memberId, pageable)!!.map { memory -> MemoryResponseDto.of(memory, self.savedMemories.any{it.memory.id == memory.id}) }
     }
 
     @Transactional

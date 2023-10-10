@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable
 
 interface MemoryService {
     fun createMemory(memberId: Long, req: MemoryRequestDto)
-    fun updateMemory(memoryId: Long, req: MemoryRequestDto): MemoryResponseDto
-    fun getMemories(pageable: Pageable, req: MemorySearchRequestDto): List<MemoryResponseDto>
-    fun getMyMemories(pageable: Pageable): Page<MemoryResponseDto>
+    fun updateMemory(memberId: Long, memoryId: Long, req: MemoryRequestDto): MemoryResponseDto
+    fun getMemories(memberId: Long, pageable: Pageable, req: MemorySearchRequestDto): List<MemoryResponseDto>
+    fun getMyMemories(memberId: Long, pageable: Pageable): Page<MemoryResponseDto>
     fun deleteMemory(memoryId: Long)
 }

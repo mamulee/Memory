@@ -8,6 +8,8 @@ import com.baby.memory.memory.dto.request.MemorySearchRequestDto
 import com.baby.memory.memory.dto.response.wrapper.MemoryWrapperDto
 import com.baby.memory.memory.service.MemoryService
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.SortDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -22,17 +24,19 @@ class MemoryController(
         pageable: Pageable,
         @RequestBody req: MemorySearchRequestDto
     ): ResponseEntity<SuccessResponse> {
+        val memberId = resourceValidator.getCurrentUserId()
         return SuccessResponse.toResponseEntity(
             MemorySuccessType.GET_MEMORY,
-            memoryService.getMemories(pageable, req)
+            memoryService.getMemories(memberId, pageable, req)
         )
     }
 
     @GetMapping("/self")
-    fun getMyMemories(pageable: Pageable): ResponseEntity<SuccessResponse> {
+    fun getMyMemories(@SortDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable): ResponseEntity<SuccessResponse> {
+        val memberId = resourceValidator.getCurrentUserId()
         return SuccessResponse.toResponseEntity(
             MemorySuccessType.GET_MY_MEMORY,
-            memoryService.getMyMemories(pageable)
+            memoryService.getMyMemories(memberId, pageable)
         )
     }
 
@@ -50,10 +54,10 @@ class MemoryController(
         @PathVariable memoryId: Long,
         @RequestBody req: MemoryRequestDto
     ): ResponseEntity<SuccessResponse> {
-        resourceValidator.validateMember(memoryId, 'M')
+        val memberId = resourceValidator.validateMember(memoryId, 'M')
         return SuccessResponse.toResponseEntity(
             MemorySuccessType.UPDATE_MEMORY,
-            MemoryWrapperDto.of(memoryService.updateMemory(memoryId, req))
+            MemoryWrapperDto.of(memoryService.updateMemory(memberId, memoryId, req))
         )
     }
 
