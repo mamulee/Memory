@@ -21,7 +21,10 @@ class SavedMemoryController(
     private val savedMemoryService: SavedMemoryService
 ) {
     @GetMapping("")
-    fun getSavedMemories(@SortDefault(sort = ["memoryId"], direction = Sort.Direction.DESC) pageable: Pageable): ResponseEntity<SuccessResponse> {
+    fun getSavedMemories(
+        @SortDefault(sort = ["memoryId"], direction = Sort.Direction.DESC)
+        pageable: Pageable
+    ): ResponseEntity<SuccessResponse> {
         // TODO : 검색 기능을 조회에 한방에 넣을지
         return SuccessResponse.toResponseEntity(
             MemorySuccessType.GET_SAVED_MEMORY,

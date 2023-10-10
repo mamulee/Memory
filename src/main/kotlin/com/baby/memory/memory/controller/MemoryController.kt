@@ -32,7 +32,10 @@ class MemoryController(
     }
 
     @GetMapping("/self")
-    fun getMyMemories(@SortDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable): ResponseEntity<SuccessResponse> {
+    fun getMyMemories(
+        @SortDefault(sort = ["id"], direction = Sort.Direction.DESC)
+        pageable: Pageable
+    ): ResponseEntity<SuccessResponse> {
         val memberId = resourceValidator.getCurrentUserId()
         return SuccessResponse.toResponseEntity(
             MemorySuccessType.GET_MY_MEMORY,

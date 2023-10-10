@@ -1,6 +1,5 @@
 package com.baby.memory.memory.service.impl
 
-import com.baby.memory.common.dto.CustomUser
 import com.baby.memory.common.responses.error.exception.MemberException
 import com.baby.memory.common.responses.error.exception.MemberExceptionType
 import com.baby.memory.common.responses.error.exception.MemoryException
@@ -14,7 +13,6 @@ import com.baby.memory.memory.service.MemoryService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -35,19 +33,21 @@ class MemoryServiceImpl(
         val self = getMember(memberId)
         val memory = getMemory(memoryId)
         memory.content = req.content
-        return MemoryResponseDto.of(memory, self.savedMemories.any{it.memory.id == memoryId})
+        return MemoryResponseDto.of(memory, self.savedMemories.any { it.memory.id == memoryId })
     }
 
     @Transactional(readOnly = true)
     override fun getMemories(memberId: Long, pageable: Pageable, req: MemorySearchRequestDto): List<MemoryResponseDto> {
         val self = getMember(memberId)
-        return memoryRepository.getMemoriesWithSearch(pageable, req).map { memory -> MemoryResponseDto.of(memory, self.savedMemories.any{it.memory.id == memory.id}) }
+        return memoryRepository.getMemoriesWithSearch(pageable, req)
+            .map { memory -> MemoryResponseDto.of(memory, self.savedMemories.any { it.memory.id == memory.id }) }
     }
 
     @Transactional(readOnly = true)
     override fun getMyMemories(memberId: Long, pageable: Pageable): Page<MemoryResponseDto> {
         val self = getMember(memberId)
-        return memoryRepository.findAllByMemberId(memberId, pageable)!!.map { memory -> MemoryResponseDto.of(memory, self.savedMemories.any{it.memory.id == memory.id}) }
+        return memoryRepository.findAllByMemberId(memberId, pageable)!!
+            .map { memory -> MemoryResponseDto.of(memory, self.savedMemories.any { it.memory.id == memory.id }) }
     }
 
     @Transactional
