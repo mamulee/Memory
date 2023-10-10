@@ -1,6 +1,5 @@
 package com.baby.memory.common.responses.success
 
-import com.baby.memory.common.responses.error.exception.BaseException
 import org.springframework.http.ResponseEntity
 
 class SuccessResponse(
@@ -8,21 +7,24 @@ class SuccessResponse(
     val successMessage: String,
     val responseObject: Any? = null
 ) {
-    companion object{
+    companion object {
         fun toResponseEntity(successType: BaseSuccessType) = ResponseEntity
             .status(successType.httpStatus)
-            .body(SuccessResponse(
-                successType.successCode,
-                successType.successMessage
-                ))
+            .body(
+                SuccessResponse(
+                    successType.successCode,
+                    successType.successMessage
+                )
+            )
 
         fun toResponseEntity(successType: BaseSuccessType, dto: Any) = ResponseEntity
             .status(successType.httpStatus)
-            .body(SuccessResponse(
-                successType.successCode,
-                successType.successMessage,
-                dto
-            ))
-
+            .body(
+                SuccessResponse(
+                    successType.successCode,
+                    successType.successMessage,
+                    dto
+                )
+            )
     }
 }

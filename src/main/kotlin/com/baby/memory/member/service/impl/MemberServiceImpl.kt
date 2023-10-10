@@ -12,7 +12,6 @@ import com.baby.memory.member.dto.response.MemberResponseDto
 import com.baby.memory.member.entity.Member
 import com.baby.memory.member.repository.MemberRepository
 import com.baby.memory.member.service.MemberService
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -28,7 +27,7 @@ class MemberServiceImpl(
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
     private val jwtTokenProvider: JwtTokenProvider,
     private val passwordEncoder: PasswordEncoder
-): MemberService {
+) : MemberService {
     @Transactional
     override fun signUp(req: MemberRequestDto) {
         validateMemberEmail(req.memberEmail)
@@ -44,8 +43,9 @@ class MemberServiceImpl(
     override fun signIn(req: MemberRequestDto): TokenInfo {
         val member = memberRepository.findByMemberEmail(req.memberEmail)
             ?: throw MemberException(MemberExceptionType.NOT_FOUND_MEMBER)
-        if(!passwordEncoder.matches(req.memberPassword, member.memberPassword))
+        if (!passwordEncoder.matches(req.memberPassword, member.memberPassword)) {
             throw MemberException(MemberExceptionType.INCORRECT_PASSWORD)
+        }
         val authenticationToken =
             UsernamePasswordAuthenticationToken(req.memberEmail, req.memberPassword)
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
@@ -98,7 +98,7 @@ class MemberServiceImpl(
     override fun toggleFollowing(memberId: Long, followedId: Long) {
         val followed = getMember(followedId)
         val member = getMember(memberId)
-        if(followed == member) throw MemberException(MemberExceptionType.NOT_AUTHORIZED_MEMBER)
+        if (followed == member) throw MemberException(MemberExceptionType.NOT_AUTHORIZED_MEMBER)
         if (member.followings.remove(followed)) {
             // 이미 팔로우 중인 경우 팔로우 취소
             followed.followers.remove(member)
@@ -110,12 +110,14 @@ class MemberServiceImpl(
     }
 
     private fun validateMemberEmail(memberEmail: String) {
-        if(memberRepository.existsByMemberEmail(memberEmail))
+        if (memberRepository.existsByMemberEmail(memberEmail)) {
             throw MemberException(MemberExceptionType.DUPLICATED_MEMBER_EMAIL)
+        }
     }
     private fun validateMemberName(memberName: String) {
-        if(memberRepository.existsByMemberName(memberName))
+        if (memberRepository.existsByMemberName(memberName)) {
             throw MemberException(MemberExceptionType.DUPLICATED_MEMBER_NAME)
+        }
     }
     private fun getMember(memberId: Long): Member {
         return memberRepository.findByIdOrNull(memberId)

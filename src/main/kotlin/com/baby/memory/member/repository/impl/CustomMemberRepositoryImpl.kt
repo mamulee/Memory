@@ -4,7 +4,6 @@ import com.baby.memory.member.dto.request.MemberSearchRequestDto
 import com.baby.memory.member.entity.Member
 import com.baby.memory.member.entity.QMember.member
 import com.baby.memory.member.repository.CustomMemberRepository
-import com.baby.memory.memory.entity.QMemory
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.data.domain.Page
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class CustomMemberRepositoryImpl(
     val jpaQueryFactory: JPAQueryFactory
-): CustomMemberRepository {
+) : CustomMemberRepository {
     override fun getMembersWithFollowStatus(pageable: Pageable): Page<Member> {
         TODO("Not yet implemented")
     }
@@ -34,5 +33,4 @@ class CustomMemberRepositoryImpl(
     ): BooleanExpression? {
         return keyword?.takeIf { it.isNotEmpty() }?.let { member.memberName.contains(it) }
     }
-
 }

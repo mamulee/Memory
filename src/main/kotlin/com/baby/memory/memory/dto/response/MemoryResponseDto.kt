@@ -18,7 +18,7 @@ data class MemoryResponseDto(
     val reactions: List<ReactionResponseDto>,
     val status: ReactionStatus,
     val createdAt: LocalDateTime
-){
+) {
     companion object {
         fun of(memory: Memory): MemoryResponseDto = MemoryResponseDto(
             memoryId = memory.id,
@@ -30,7 +30,7 @@ data class MemoryResponseDto(
             sadCnt = memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.SAD }.size,
             angryCnt = memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.ANGRY }.size,
             reactions = memory.reactions.map { ReactionResponseDto.of(it) },
-            status = memory.reactions.firstOrNull{
+            status = memory.reactions.firstOrNull {
                 it.member.id == (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
             }?.status ?: ReactionStatus.NEUTRAL,
             createdAt = memory.createdAt

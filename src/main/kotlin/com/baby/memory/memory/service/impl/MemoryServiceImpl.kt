@@ -5,13 +5,12 @@ import com.baby.memory.common.responses.error.exception.MemberException
 import com.baby.memory.common.responses.error.exception.MemberExceptionType
 import com.baby.memory.common.responses.error.exception.MemoryException
 import com.baby.memory.common.responses.error.exception.MemoryExceptionType
+import com.baby.memory.member.repository.MemberRepository
 import com.baby.memory.memory.dto.request.MemoryRequestDto
+import com.baby.memory.memory.dto.request.MemorySearchRequestDto
 import com.baby.memory.memory.dto.response.MemoryResponseDto
 import com.baby.memory.memory.repository.MemoryRepository
 import com.baby.memory.memory.service.MemoryService
-import com.baby.memory.member.repository.MemberRepository
-import com.baby.memory.memory.dto.request.MemorySearchRequestDto
-import com.baby.memory.memory.repository.CustomMemoryRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -22,8 +21,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class MemoryServiceImpl(
     private val memberRepository: MemberRepository,
-    private val memoryRepository: MemoryRepository,
-): MemoryService {
+    private val memoryRepository: MemoryRepository
+) : MemoryService {
     @Transactional
     override fun createMemory(memberId: Long, req: MemoryRequestDto) {
         val member = getMember(memberId)

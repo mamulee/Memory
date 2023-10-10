@@ -14,18 +14,20 @@ class ResourceValidatorImpl(
     private val memberRepository: MemberRepository,
     private val memoryRepository: MemoryRepository,
     private val commentRepository: CommentRepository
-): ResourceValidator {
+) : ResourceValidator {
     override fun getCurrentUserId(): Long {
         return authenticationFacade.getPrincipal().userId
     }
 
     override fun validateMember(id: Long, type: Char) {
         val memberId = getCurrentUserId()
-        when(type) {
-            'M' -> if(!memoryRepository.existsByIdAndMemberId(id, memberId))
+        when (type) {
+            'M' -> if (!memoryRepository.existsByIdAndMemberId(id, memberId)) {
                 throw MemberException(MemberExceptionType.NOT_AUTHORIZED_MEMBER)
-            'C' -> if(!commentRepository.existsByIdAndMemberId(id, memberId))
+            }
+            'C' -> if (!commentRepository.existsByIdAndMemberId(id, memberId)) {
                 throw MemberException(MemberExceptionType.NOT_AUTHORIZED_MEMBER)
+            }
         }
     }
 }

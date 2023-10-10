@@ -16,7 +16,7 @@ class CommentServiceImpl(
     private val memberRepository: MemberRepository,
     private val memoryRepository: MemoryRepository,
     private val commentRepository: CommentRepository
-): CommentService {
+) : CommentService {
     @Transactional
     override fun createComment(memberId: Long, memoryId: Long, req: CommentRequestDto) {
         val member = getMember(memberId)

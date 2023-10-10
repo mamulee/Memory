@@ -14,9 +14,11 @@ class Member(
     var memberName: String? = null,
     // TODO : 프로필 사진 필드
     @ManyToMany
-    @JoinTable(name = "member_relations",
-                joinColumns = [JoinColumn(name = "followed_id")],
-            inverseJoinColumns = [JoinColumn(name = "follower_id")])
+    @JoinTable(
+        name = "member_relations",
+        joinColumns = [JoinColumn(name = "followed_id")],
+        inverseJoinColumns = [JoinColumn(name = "follower_id")]
+    )
     val followers: MutableList<Member> = mutableListOf(),
     @ManyToMany(mappedBy = "followers")
     val followings: MutableList<Member> = mutableListOf(),
@@ -26,8 +28,9 @@ class Member(
     val savedMemories: MutableList<SavedMemory> = mutableListOf(),
     @Enumerated(EnumType.STRING)
     var memberRole: ROLE? = null
-): BaseTimeEntity() {
-    @Id @GeneratedValue
+) : BaseTimeEntity() {
+    @Id
+    @GeneratedValue
     @Column(name = "member_id")
     var id: Long = 0
         protected set

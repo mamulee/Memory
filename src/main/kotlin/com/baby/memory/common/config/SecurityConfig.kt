@@ -20,8 +20,8 @@ class SecurityConfig(
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .httpBasic{ it.disable() }
-            .csrf{ it.disable() }
+            .httpBasic { it.disable() }
+            .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) } // JWT를 사용하기 때문에 Session 사용 X
             .authorizeHttpRequests {
                 it.requestMatchers(

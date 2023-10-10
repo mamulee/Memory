@@ -8,7 +8,7 @@ data class ReactionResponseDto(
     val memberId: Long,
     val status: ReactionStatus
 ) {
-    companion object{
+    companion object {
         fun of(reaction: Reaction): ReactionResponseDto = ReactionResponseDto(
             memoryId = reaction.memory.id,
             memberId = reaction.member.id,

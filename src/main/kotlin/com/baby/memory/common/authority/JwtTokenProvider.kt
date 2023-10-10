@@ -75,12 +75,12 @@ class JwtTokenProvider {
             return true
         } catch (e: Exception) {
             when (e) {
-                is SecurityException -> {}  // Invalid JWT Token
-                is MalformedJwtException -> {}  // Invalid JWT Token
-                is ExpiredJwtException -> {}    // Expired JWT Token
+                is SecurityException -> {} // Invalid JWT Token
+                is MalformedJwtException -> {} // Invalid JWT Token
+                is ExpiredJwtException -> {} // Expired JWT Token
                 is UnsupportedJwtException -> {} // Unsupported JWT Token
                 is IllegalArgumentException -> {} // JWT claims string is empty
-                else -> {}  // else
+                else -> {} // else
             }
             println(e.message)
         }

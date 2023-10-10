@@ -25,6 +25,6 @@ data class MemberResponseDto(
             followingCnt = member.followings.size,
             followingStatus = status,
             memories = member.memories.map { MemoryResponseDto.of(it) }
-            )
+        )
     }
 }

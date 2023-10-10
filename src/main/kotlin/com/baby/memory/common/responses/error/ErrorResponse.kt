@@ -6,7 +6,7 @@ class ErrorResponse(
     val errorCode: String,
     val errorMessage: String
 ) {
-    companion object{
+    companion object {
         fun of(exception: BaseException) = ErrorResponse(
             errorCode = exception.baseExceptionType.errorCode,
             errorMessage = exception.baseExceptionType.errorMessage

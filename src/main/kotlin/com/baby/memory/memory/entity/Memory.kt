@@ -1,8 +1,8 @@
 package com.baby.memory.memory.entity
 
 import com.baby.memory.common.entity.BaseTimeEntity
-import com.baby.memory.memory.entity.enum.ReactionStatus
 import com.baby.memory.member.entity.Member
+import com.baby.memory.memory.entity.enum.ReactionStatus
 import jakarta.persistence.*
 
 @Entity
@@ -17,8 +17,9 @@ class Memory(
     @OneToMany(mappedBy = "memory")
     val reactions: MutableList<Reaction> = mutableListOf(),
     var isDeleted: Boolean = false
-): BaseTimeEntity() {
-    @Id @GeneratedValue
+) : BaseTimeEntity() {
+    @Id
+    @GeneratedValue
     @Column(name = "memory_id")
     var id: Long = 0
         protected set
@@ -36,9 +37,11 @@ class Memory(
     @get:Transient
     val likeCnt: Int
         get() = reactions.filter { it.status == ReactionStatus.LIKE }.size
+
     @get:Transient
     val sadCnt: Int
         get() = reactions.filter { it.status == ReactionStatus.SAD }.size
+
     @get:Transient
     val angryCnt: Int
         get() = reactions.filter { it.status == ReactionStatus.ANGRY }.size

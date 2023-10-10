@@ -1,7 +1,7 @@
 package com.baby.memory.memory.entity
 
-import com.baby.memory.memory.entity.enum.ReactionStatus
 import com.baby.memory.member.entity.Member
+import com.baby.memory.memory.entity.enum.ReactionStatus
 import jakarta.persistence.*
 
 @Entity

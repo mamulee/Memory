@@ -29,9 +29,10 @@ class MemberController(
             memberService.getMembers(req, pageable)
         )
     }
+
     @GetMapping("{memberId}")
     fun getMember(
-        @PathVariable memberId: Long,
+        @PathVariable memberId: Long
     ): ResponseEntity<SuccessResponse> {
         val selfId = resourceValidator.getCurrentUserId()
         return SuccessResponse.toResponseEntity(
@@ -39,9 +40,10 @@ class MemberController(
             memberService.getMemberInfo(memberId, selfId)
         )
     }
+
     @GetMapping("/member/{memberName}")
     fun getMemberByMemberName(
-        @PathVariable memberName: String,
+        @PathVariable memberName: String
     ): ResponseEntity<SuccessResponse> {
         val selfId = resourceValidator.getCurrentUserId()
         return SuccessResponse.toResponseEntity(
@@ -89,7 +91,7 @@ class MemberController(
     @GetMapping("/following/{followedId}")
     fun toggleFollowing(
         @PathVariable followedId: Long
-    ):ResponseEntity<SuccessResponse> {
+    ): ResponseEntity<SuccessResponse> {
         val memberId = resourceValidator.getCurrentUserId()
         memberService.toggleFollowing(memberId, followedId)
         // TODO : 팔로우 / 팔로우 취소 구분?

@@ -19,7 +19,6 @@ class CustomUserDetailsService(
         memberRepository.findByMemberEmail(username)
             ?.let { createUserDetails(it) } ?: throw UsernameNotFoundException("사용자 정보 없음.")
 
-
     private fun createUserDetails(member: Member): UserDetails =
         CustomUser(
             member.id,

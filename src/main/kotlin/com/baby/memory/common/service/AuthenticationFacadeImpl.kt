@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
-class AuthenticationFacadeImpl: AuthenticationFacade {
+class AuthenticationFacadeImpl : AuthenticationFacade {
     override fun getAuthentication(): Authentication {
         return SecurityContextHolder.getContext().authentication
     }

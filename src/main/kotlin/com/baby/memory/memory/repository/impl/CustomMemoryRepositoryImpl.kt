@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable
 
 class CustomMemoryRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory
-): CustomMemoryRepository {
+) : CustomMemoryRepository {
     override fun getMemoriesWithSearch(pageable: Pageable, req: MemorySearchRequestDto): List<Memory> {
         val expressions: Array<BooleanExpression?> = transferExpressions(req)
         return jpaQueryFactory
@@ -38,6 +38,4 @@ class CustomMemoryRepositoryImpl(
             searchContent(req.keyword)
         )
     }
-
-
 }

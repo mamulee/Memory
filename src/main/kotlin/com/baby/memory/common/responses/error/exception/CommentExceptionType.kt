@@ -6,8 +6,10 @@ enum class CommentExceptionType(
     override val errorCode: String,
     override val httpStatus: HttpStatus,
     override val errorMessage: String
-): BaseExceptionType {
+) : BaseExceptionType {
     NOT_FOUND_COMMENT(
-        "CE001", HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."
+        "CE001",
+        HttpStatus.NOT_FOUND,
+        "존재하지 않는 댓글입니다."
     )
 }

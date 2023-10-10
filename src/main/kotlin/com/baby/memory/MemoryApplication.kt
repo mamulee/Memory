@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 class MemoryApplication
 
 fun main(args: Array<String>) {
-	runApplication<MemoryApplication>(*args)
+    runApplication<MemoryApplication>(*args)
 }

@@ -5,13 +5,10 @@ import com.baby.memory.common.responses.error.exception.MemberException
 import com.baby.memory.common.responses.error.exception.MemberExceptionType
 import com.baby.memory.common.responses.error.exception.MemoryException
 import com.baby.memory.common.responses.error.exception.MemoryExceptionType
-import com.baby.memory.memory.dto.request.MemoryRequestDto
-import com.baby.memory.memory.dto.response.MemoryResponseDto
-import com.baby.memory.memory.repository.MemoryRepository
-import com.baby.memory.memory.service.MemoryService
 import com.baby.memory.member.repository.MemberRepository
 import com.baby.memory.memory.dto.response.SavedMemoryResponseDto
 import com.baby.memory.memory.entity.SavedMemory
+import com.baby.memory.memory.repository.MemoryRepository
 import com.baby.memory.memory.repository.SavedMemoryRepository
 import com.baby.memory.memory.service.SavedMemoryService
 import org.springframework.data.domain.Page
@@ -19,19 +16,18 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class SavedMemoryServiceImpl(
     private val memberRepository: MemberRepository,
     private val memoryRepository: MemoryRepository,
     private val savedMemoryRepository: SavedMemoryRepository
-): SavedMemoryService {
+) : SavedMemoryService {
     override fun addSavedMemory(memoryId: Long) {
         val memberId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
         val member = getMember(memberId)
         val memory = getMemory(memoryId)
-        //TODO: 중복 저장 금지. 이미 한 걸 쏘면 삭제하기를 합칠까ㅓ?
+        // TODO: 중복 저장 금지. 이미 한 걸 쏘면 삭제하기를 합칠까ㅓ?
         val savedMemory = SavedMemory(member, memory)
         savedMemoryRepository.save(savedMemory)
     }
