@@ -52,6 +52,10 @@ class MemberServiceImpl(
         return jwtTokenProvider.createToken(authentication)
     }
 
+    override fun signOut() {
+        TODO("Not yet implemented")
+    }
+
     // TODO : 최적화 필요
     @Transactional(readOnly = true)
     override fun getMembers(req: MemberSearchRequestDto, pageable: Pageable): List<MemberResponseDto> {

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable
 interface MemberService {
     fun signUp(req: MemberRequestDto)
     fun signIn(req: MemberRequestDto): TokenInfo
+    fun signOut()
     fun getMembers(req: MemberSearchRequestDto, pageable: Pageable): List<MemberResponseDto>
     fun getMyInfo(memberId: Long): MemberResponseDto
     fun getMemberInfo(memberId: Long, selfId: Long): MemberResponseDto

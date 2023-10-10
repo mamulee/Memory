@@ -68,6 +68,14 @@ class MemberController(
         )
     }
 
+    @PostMapping("/sign-out")
+    fun signIn(): ResponseEntity<SuccessResponse> {
+        memberService.signOut()
+        return SuccessResponse.toResponseEntity(
+            MemberSuccessType.SIGN_OUT
+        )
+    }
+
     @GetMapping("/me")
     fun getMyInfo(): ResponseEntity<SuccessResponse> {
         val memberId = resourceValidator.getCurrentUserId()
