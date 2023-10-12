@@ -4,6 +4,7 @@ import com.baby.memory.common.authority.JwtTokenProvider
 import com.baby.memory.common.authority.TokenInfo
 import com.baby.memory.common.responses.error.exception.MemberException
 import com.baby.memory.common.responses.error.exception.MemberExceptionType
+import com.baby.memory.common.responses.success.MemberSuccessType
 import com.baby.memory.common.status.ROLE
 import com.baby.memory.member.dto.request.MemberRequestDto
 import com.baby.memory.member.dto.request.MemberSearchRequestDto
@@ -99,17 +100,19 @@ class MemberServiceImpl(
     }
 
     @Transactional
-    override fun toggleFollowing(memberId: Long, followedId: Long) {
+    override fun toggleFollowing(memberId: Long, followedId: Long): MemberSuccessType {
         val followed = getMember(followedId)
         val member = getMember(memberId)
         if (followed == member) throw MemberException(MemberExceptionType.NOT_AUTHORIZED_MEMBER)
         if (member.followings.remove(followed)) {
             // 이미 팔로우 중인 경우 팔로우 취소
             followed.followers.remove(member)
+            return MemberSuccessType.UNFOLLOW
         } else {
             // 팔로우하지 않은 경우 팔로우
             member.followings.add(followed)
             followed.followers.add(member)
+            return MemberSuccessType.FOLLOWING
         }
     }
 

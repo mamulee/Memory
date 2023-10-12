@@ -1,6 +1,7 @@
 package com.baby.memory.member.service
 
 import com.baby.memory.common.authority.TokenInfo
+import com.baby.memory.common.responses.success.MemberSuccessType
 import com.baby.memory.member.dto.request.MemberRequestDto
 import com.baby.memory.member.dto.request.MemberSearchRequestDto
 import com.baby.memory.member.dto.request.MemberUpdateRequestDto
@@ -16,5 +17,5 @@ interface MemberService {
     fun getMemberInfo(memberId: Long, selfId: Long): MemberResponseDto
     fun getMemberInfoByMemberName(memberName: String, selfId: Long): MemberResponseDto
     fun updateMyInfo(memberId: Long, req: MemberUpdateRequestDto)
-    fun toggleFollowing(memberId: Long, followedId: Long)
+    fun toggleFollowing(memberId: Long, followedId: Long): MemberSuccessType
 }

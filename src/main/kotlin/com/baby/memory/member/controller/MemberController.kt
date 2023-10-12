@@ -101,8 +101,6 @@ class MemberController(
         @PathVariable followedId: Long
     ): ResponseEntity<SuccessResponse> {
         val memberId = resourceValidator.getCurrentUserId()
-        memberService.toggleFollowing(memberId, followedId)
-        // TODO : 팔로우 / 팔로우 취소 구분?
-        return SuccessResponse.toResponseEntity(MemberSuccessType.FOLLOWING)
+        return SuccessResponse.toResponseEntity(memberService.toggleFollowing(memberId, followedId))
     }
 }

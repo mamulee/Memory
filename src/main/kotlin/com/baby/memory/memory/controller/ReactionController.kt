@@ -20,7 +20,6 @@ class ReactionController(
         @PathVariable memoryId: Long,
         @RequestBody req: ReactionRequestDto
     ): ResponseEntity<SuccessResponse> {
-        // TODO : 어떤 거 반환..?
         val memberId = resourceValidator.getCurrentUserId()
         reactionService.reaction(memoryId, memberId, req)
         return SuccessResponse.toResponseEntity(

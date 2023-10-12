@@ -42,9 +42,12 @@ data class MemoryResponseDto(
             memberName = savedMemory.memory.member.memberName!!,
             content = savedMemory.memory.content,
             comments = savedMemory.memory.comments.map { CommentResponseDto.of(it) },
-            likeCnt = savedMemory.memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.LIKE }.size,
-            sadCnt = savedMemory.memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.SAD }.size,
-            angryCnt = savedMemory.memory.reactions.filter { ReactionResponseDto.of(it).status == ReactionStatus.ANGRY }.size,
+            likeCnt = savedMemory.memory.reactions
+                .filter { ReactionResponseDto.of(it).status == ReactionStatus.LIKE }.size,
+            sadCnt = savedMemory.memory.reactions
+                .filter { ReactionResponseDto.of(it).status == ReactionStatus.SAD }.size,
+            angryCnt = savedMemory.memory.reactions
+                .filter { ReactionResponseDto.of(it).status == ReactionStatus.ANGRY }.size,
             reactionStatus = savedMemory.memory.reactions.firstOrNull {
                 it.member.id == (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
             }?.status ?: ReactionStatus.NEUTRAL,
