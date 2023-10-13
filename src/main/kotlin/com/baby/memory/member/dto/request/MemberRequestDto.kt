@@ -10,8 +10,12 @@ data class MemberRequestDto(
     @NotBlank(message = "회원 비밀번호는 공백일 수 없습니다.")
     val memberPassword: String
 ) {
-    fun toEntity(passwordEncoder: PasswordEncoder): Member = Member(
+    fun toEntity(
+        passwordEncoder: PasswordEncoder,
+        memberName: String
+    ): Member = Member(
         memberEmail,
-        memberPassword = passwordEncoder.encode(memberPassword)
+        memberPassword = passwordEncoder.encode(memberPassword),
+        memberName
     )
 }

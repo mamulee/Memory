@@ -35,8 +35,7 @@ class MemberServiceImpl(
         val randomStr = "user_${UUID.randomUUID()}"
         val memberName = randomStr.substring(0, randomStr.indexOf("-"))
         validateMemberName(memberName)
-        val member = req.toEntity(passwordEncoder)
-        member.memberName = memberName
+        val member = req.toEntity(passwordEncoder, memberName)
         member.memberRole = ROLE.MEMBER
         memberRepository.save(member)
     }

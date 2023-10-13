@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 class Member(
     val memberEmail: String,
     var memberPassword: String,
-    var memberName: String? = null,
+    var memberName: String,
     // TODO : 프로필 사진 필드
     @ManyToMany
     @JoinTable(
